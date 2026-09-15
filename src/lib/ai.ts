@@ -17,24 +17,36 @@ export async function generateAdvisorNarrative(
   const openAiKey = process.env.OPENAI_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
 
-  const redCategories = scorecard.categoryResults
-    .filter((c) => c.status === "red")
-    .map((c) => `${c.shortTitle} (${c.percentageScore}%)`);
-  const yellowCategories = scorecard.categoryResults
-    .filter((c) => c.status === "yellow")
-    .map((c) => `${c.shortTitle} (${c.percentageScore}%)`);
-  const greenCategories = scorecard.categoryResults
-    .filter((c) => c.status === "green")
-    .map((c) => `${c.shortTitle} (${c.percentageScore}%)`);
+  const categoryResults = Array.isArray(scorecard?.categoryResults)
+    ? scorecard.categoryResults
+    : [];
 
-  const prompt = `You are a Senior CFP® (Certified Financial Planner) at ${profile.advisoryFirm || "Blue Ridge & Meridian Wealth Partners"}.
-Write a polished, 2-paragraph executive assessment narrative for client: ${profile.clientName} (Age ${profile.currentAge}, target retirement age ${profile.targetRetirementAge}).
-Current Assets: $${(profile.currentRetirementSavings || 0).toLocaleString()} | Target Retirement Income: $${(profile.targetMonthlyRetirementIncome || 0).toLocaleString()}/mo.
-Overall Retirement Readiness Score: ${scorecard.overallScore}/100 (${scorecard.overallStatusLabel}).
+  const redCategories = categoryResults
+    .filter((c) => c?.status === "red")
+    .map((c) => `${c.shortTitle || c.categoryTitle} (${c.percentageScore || 0}%)`);
+  const yellowCategories = categoryResults
+    .filter((c) => c?.status === "yellow")
+    .map((c) => `${c.shortTitle || c.categoryTitle} (${c.percentageScore || 0}%)`);
+  const greenCategories = categoryResults
+    .filter((c) => c?.status === "green")
+    .map((c) => `${c.shortTitle || c.categoryTitle} (${c.percentageScore || 0}%)`);
+
+  const clientName = profile?.clientName || "Prospective Client";
+  const currentAge = profile?.currentAge || 55;
+  const targetAge = profile?.targetRetirementAge || 65;
+  const currentSavings = profile?.currentRetirementSavings || 0;
+  const targetMonthly = profile?.targetMonthlyRetirementIncome || 0;
+  const overallScore = scorecard?.overallScore ?? 70;
+  const overallStatusLabel = scorecard?.overallStatusLabel || "Moderate Readiness";
+
+  const prompt = `You are a Senior CFP® (Certified Financial Planner) at ${profile?.advisoryFirm || "Blue Ridge & Meridian Wealth Partners"}.
+Write a polished, 2-paragraph executive assessment narrative for client: ${clientName} (Age ${currentAge}, target retirement age ${targetAge}).
+Current Assets: $${currentSavings.toLocaleString()} | Target Retirement Income: $${targetMonthly.toLocaleString()}/mo.
+Overall Retirement Readiness Score: ${overallScore}/100 (${overallStatusLabel}).
 Category Breakdown:
-- Green / On Track: ${greenCategories.join(", ") || "None"}
-- Yellow / Attention Needed: ${yellowCategories.join(", ") || "None"}
-- Red / Critical Deficit: ${redCategories.join(", ") || "None"}
+- Green / On Track: ${greenCategories.join(", ") || "None identified"}
+- Yellow / Attention Needed: ${yellowCategories.join(", ") || "None identified"}
+- Red / Critical Deficit: ${redCategories.join(", ") || "None identified"}
 
 Provide an authoritative, compassionate, and professional diagnostic review that explains their score, highlights their major strength, and clarifies the urgent next steps before their planned retirement. Return strictly a JSON object with this exact shape:
 {
@@ -75,8 +87,10 @@ Provide an authoritative, compassionate, and professional diagnostic review that
           const parsed = JSON.parse(content);
           return {
             narrative: parsed.narrative,
-            keyStrengths: parsed.keyStrengths || [],
-            immediateActionPoints: parsed.immediateActionPoints || [],
+            keyStrengths: Array.isArray(parsed.keyStrengths) ? parsed.keyStrengths : [],
+            immediateActionPoints: Array.isArray(parsed.immediateActionPoints)
+              ? parsed.immediateActionPoints
+              : [],
             provider: "openai",
             model: "gpt-4o-mini",
             latencyMs: Date.now() - startTime,
@@ -114,8 +128,10 @@ Provide an authoritative, compassionate, and professional diagnostic review that
           const parsed = JSON.parse(text);
           return {
             narrative: parsed.narrative,
-            keyStrengths: parsed.keyStrengths || [],
-            immediateActionPoints: parsed.immediateActionPoints || [],
+            keyStrengths: Array.isArray(parsed.keyStrengths) ? parsed.keyStrengths : [],
+            immediateActionPoints: Array.isArray(parsed.immediateActionPoints)
+              ? parsed.immediateActionPoints
+              : [],
             provider: "gemini",
             model: "gemini-2.0-flash",
             latencyMs: Date.now() - startTime,
@@ -128,21 +144,24 @@ Provide an authoritative, compassionate, and professional diagnostic review that
   }
 
   // 3. Deterministic High-Quality Fallback
-  const clientFirstName = profile.clientName.split(" ")[0] || "Client";
-  const yearsToRetire = Math.max(1, profile.targetRetirementAge - profile.currentAge);
+  const yearsToRetire = Math.max(1, targetAge - currentAge);
 
   const fallbackNarrative =
-    `Based on our diagnostic evaluation, ${profile.clientName} has established an Overall Retirement Readiness Score of ${scorecard.overallScore}/100, placing the household in the "${scorecard.overallStatusLabel}" tier. With ${yearsToRetire} years remaining until target retirement at age ${profile.targetRetirementAge}, the current asset base of $${(profile.currentRetirementSavings || 0).toLocaleString()} represents a commendable foundation. However, strategic alignment across tax diversification and longevity risk mitigation is required to safeguard your desired monthly retirement income of $${(profile.targetMonthlyRetirementIncome || 0).toLocaleString()}.\n\n` +
+    `Based on our diagnostic evaluation, ${clientName} has established an Overall Retirement Readiness Score of ${overallScore}/100, placing the household in the "${overallStatusLabel}" tier. With ${yearsToRetire} years remaining until target retirement at age ${targetAge}, the current asset base of $${currentSavings.toLocaleString()} represents a commendable foundation. However, strategic alignment across tax diversification and longevity risk mitigation is required to safeguard your desired monthly retirement income of $${targetMonthly.toLocaleString()}.\n\n` +
     `Immediate advisory focus should center on addressing the vulnerabilities identified in ${redCategories.length > 0 ? redCategories.join(" and ") : "tax planning and sequence risk"}. By establishing a formal multi-year distribution hierarchy and stress-testing healthcare bridge contingencies, we can insulate your portfolio against unexpected market drawdowns while systematically lowering lifetime tax liabilities.`;
+
+  const priorityActions = Array.isArray(scorecard?.priorityActions)
+    ? scorecard.priorityActions
+    : [];
 
   return {
     narrative: fallbackNarrative,
     keyStrengths: [
-      `Current retirement nest egg of $${(profile.currentRetirementSavings || 0).toLocaleString()} provides solid baseline capital`,
+      `Current retirement nest egg of $${currentSavings.toLocaleString()} provides solid baseline capital`,
       `Clear target timeline with ${yearsToRetire} years to execute proactive restructuring`,
     ],
-    immediateActionPoints: scorecard.priorityActions.length > 0
-      ? scorecard.priorityActions
+    immediateActionPoints: priorityActions.length > 0
+      ? priorityActions
       : [
           "Model multi-year Roth conversion runway prior to Required Minimum Distributions",
           "Lock in an optimal Social Security claiming timeline for higher earner",
