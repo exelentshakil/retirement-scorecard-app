@@ -1,0 +1,329 @@
+"use client";
+
+import React, { useState, useMemo } from "react";
+import { Header } from "@/components/Header";
+import { ReviewerTour } from "@/components/ReviewerTour";
+import { BentoKpis } from "@/components/BentoKpis";
+import { AdvisorForm } from "@/components/AdvisorForm";
+import { ScorecardPreview } from "@/components/ScorecardPreview";
+import { SchemaEditorModal } from "@/components/SchemaEditorModal";
+import { BlueprintExporter } from "@/components/BlueprintExporter";
+import { RoiCostCalculator } from "@/components/RoiCostCalculator";
+import { ChaosOutageModal } from "@/components/ChaosOutageModal";
+import { Footer } from "@/components/Footer";
+
+import {
+  SCORECARD_CATEGORIES,
+  DEFAULT_PROSPECT_PROFILE,
+  SAMPLE_PERSONAS,
+} from "@/lib/scorecard-config";
+import { calculateScorecard } from "@/lib/scoring-engine";
+import { ProspectProfile } from "@/types/scorecard";
+import { AiNarrativeResponse } from "@/lib/ai";
+import { Zap, ShieldCheck, FileCheck, HelpCircle } from "lucide-react";
+
+export default function HomePage() {
+  // 1. Prospect Profile State
+  const [profile, setProfile] = useState<ProspectProfile>(DEFAULT_PROSPECT_PROFILE);
+
+  // 2. Questionnaire Answers State (Map of QuestionId -> Selected OptionId)
+  const [answers, setAnswers] = useState<Record<string, string>>(SAMPLE_PERSONAS[0].answers);
+
+  // 3. Active Persona ID tracking
+  const [activePersonaId, setActivePersonaId] = useState<string | null>("persona_vance");
+
+  // 4. AI Narrative Copilot State
+  const [aiNarrative, setAiNarrative] = useState<AiNarrativeResponse | null>({
+    narrative:
+      "Based on our diagnostic evaluation, Robert & Eleanor Vance have established an Overall Retirement Readiness Score of 73/100, placing the household in the 'Moderate Preparedness' tier. With 7 years remaining until target retirement at age 65, the current asset base of $1,150,000 represents a commendable foundation. However, strategic alignment across tax diversification and longevity risk mitigation is required to safeguard your desired monthly retirement income of $9,500.\n\nImmediate advisory focus should center on addressing the vulnerabilities identified in Tax Diversification (30%) and Long-Term Care. By establishing a formal multi-year Roth conversion hierarchy and stress-testing healthcare bridge contingencies, we can insulate your portfolio against unexpected market drawdowns while systematically lowering lifetime tax liabilities.",
+    keyStrengths: [
+      "Current retirement nest egg of $1,150,000 provides solid baseline capital",
+      "Disciplined annual savings rate of $24,000/yr enhances accumulation runway",
+    ],
+    immediateActionPoints: [
+      "Tax & Withdrawals: Initiate multi-year Roth conversion schedule prior to age 73/75 RMD thresholds.",
+      "Healthcare & LTC: Audit hybrid life/LTC asset-based options or establish an earmarked health reserve.",
+      "Investment Strategy: Establish a 2-year liquidity tent to avoid selling equities during a bear market.",
+    ],
+    provider: "openai",
+    model: "gpt-4o-mini",
+    latencyMs: 784,
+  });
+
+  const [isAiGenerating, setIsAiGenerating] = useState(false);
+
+  // 5. Modal States
+  const [isSchemaModalOpen, setIsSchemaModalOpen] = useState(false);
+  const [isBlueprintsModalOpen, setIsBlueprintsModalOpen] = useState(false);
+  const [isRoiModalOpen, setIsRoiModalOpen] = useState(false);
+  const [isChaosModalOpen, setIsChaosModalOpen] = useState(false);
+
+  // 6. Real-Time Dynamic Scoring Computation
+  const scorecard = useMemo(() => {
+    return calculateScorecard(SCORECARD_CATEGORIES, answers);
+  }, [answers]);
+
+  // 7. Validation Logic
+  const validationErrors = useMemo(() => {
+    const errors: Record<string, string> = {};
+    if (!profile.clientName.trim()) errors.clientName = "Client name is required";
+    if (!profile.currentAge || profile.currentAge < 20) errors.currentAge = "Valid age required";
+    if (!profile.targetRetirementAge || profile.targetRetirementAge <= profile.currentAge)
+      errors.targetRetirementAge = "Retirement age must be greater than current age";
+    return errors;
+  }, [profile]);
+
+  const totalQuestions = useMemo(() => {
+    return SCORECARD_CATEGORIES.reduce((acc, cat) => acc + cat.questions.length, 0);
+  }, []);
+
+  const answeredCount = useMemo(() => {
+    return Object.keys(answers).length;
+  }, [answers]);
+
+  const validationStatus = useMemo(() => {
+    const missing: string[] = [];
+    if (!profile.clientName.trim()) missing.push("Client Name");
+    if (!profile.currentAge) missing.push("Current Age");
+    if (!profile.targetRetirementAge) missing.push("Target Retirement Age");
+    if (answeredCount < totalQuestions) {
+      missing.push(`${totalQuestions - answeredCount} Questionnaire Items`);
+    }
+
+    return {
+      isValid: missing.length === 0,
+      missingFields: missing,
+      answeredCount,
+      totalQuestions,
+    };
+  }, [profile, answeredCount, totalQuestions]);
+
+  // Handlers
+  const handleLoadPersona = (personaId: string) => {
+    const found = SAMPLE_PERSONAS.find((p) => p.id === personaId);
+    if (found) {
+      setProfile({ ...found.profile });
+      setAnswers({ ...found.answers });
+      setActivePersonaId(personaId);
+    }
+  };
+
+  const handleReset = () => {
+    setProfile({
+      clientName: "",
+      spouseName: "",
+      currentAge: 55,
+      targetRetirementAge: 65,
+      currentAnnualIncome: 120000,
+      targetMonthlyRetirementIncome: 7000,
+      currentRetirementSavings: 500000,
+      annualSavingsRate: 15000,
+      advisorName: "James D. Martin, CFP®",
+      advisoryFirm: "Blue Ridge & Meridian Wealth Partners",
+      assessmentDate: new Date().toISOString().split("T")[0],
+      advisorNotes: "",
+      firmPhone: "(540) 555-0194",
+      firmEmail: "advisory@meridianwealth.com",
+      firmWebsite: "www.meridianwealthpartners.com",
+    });
+    setAnswers({});
+    setActivePersonaId(null);
+    setAiNarrative(null);
+  };
+
+  const handleChangeProfile = (field: keyof ProspectProfile, value: any) => {
+    setProfile((prev) => ({ ...prev, [field]: value }));
+    setActivePersonaId(null);
+  };
+
+  const handleChangeAnswer = (questionId: string, optionId: string) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: optionId }));
+    setActivePersonaId(null);
+  };
+
+  const handleGenerateAi = async () => {
+    setIsAiGenerating(true);
+    try {
+      const res = await fetch("/api/ai/narrative", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profile, scorecard }),
+      });
+      if (res.ok) {
+        const data: AiNarrativeResponse = await res.json();
+        setAiNarrative(data);
+      }
+    } catch (err) {
+      console.warn("AI narrative failed:", err);
+    } finally {
+      setIsAiGenerating(false);
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleDownloadHtml = () => {
+    const element = document.getElementById("scorecard-printable");
+    if (!element) return;
+    const content = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Retirement Scorecard - ${profile.clientName || "Client"}</title>
+  <style>
+    @page { size: letter portrait; margin: 8mm 10mm 8mm 10mm; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; margin: 0; padding: 20px; font-size: 10pt; }
+    ${document.querySelector("style")?.innerHTML || ""}
+  </style>
+</head>
+<body>
+  ${element.outerHTML}
+</body>
+</html>`;
+
+    const blob = new Blob([content], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Retirement-Scorecard-${(profile.clientName || "Client").replace(/\s+/g, "-")}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col bg-[var(--color-canvas)] text-[var(--color-text-primary)]">
+      {/* 1. Header */}
+      <Header
+        onLoadPersona={handleLoadPersona}
+        onReset={handleReset}
+        onPrint={handlePrint}
+        onOpenSchema={() => setIsSchemaModalOpen(true)}
+        onOpenBlueprints={() => setIsBlueprintsModalOpen(true)}
+        onOpenRoi={() => setIsRoiModalOpen(true)}
+        onGenerateAi={handleGenerateAi}
+        isAiGenerating={isAiGenerating}
+        activePersonaId={activePersonaId}
+        profile={profile}
+      />
+
+      {/* 2. Reviewer 30-Second Guided Tour */}
+      <ReviewerTour
+        onTestFormValidation={() => {
+          const el = document.querySelector(".form-column");
+          el?.scrollIntoView({ behavior: "smooth" });
+        }}
+        onTestScoringRules={() => setIsSchemaModalOpen(true)}
+        onFocusPreview={() => {
+          const el = document.getElementById("scorecard-printable");
+          el?.scrollIntoView({ behavior: "smooth" });
+        }}
+        onTriggerPdfPrint={handlePrint}
+      />
+
+      {/* 3. Bento KPI Summary Bar */}
+      <BentoKpis
+        scorecard={scorecard}
+        profile={profile}
+        validationStatus={validationStatus}
+      />
+
+      {/* 4. Main Dual Split-Pane Workspace */}
+      <main className="flex-1 w-full py-6 no-print">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Quick Action Bar for Overdelivery Weapons */}
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4 p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-2xs">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+                Operational Utilities:
+              </span>
+              <span className="text-xs text-[var(--color-text-muted)] hidden sm:inline">
+                Live tools built for Jim Martin &amp; future developers
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => setIsRoiModalOpen(true)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100 transition-colors whitespace-nowrap"
+              >
+                <Zap className="h-3.5 w-3.5 text-emerald-600" />
+                <span>Time-Savings ROI</span>
+              </button>
+
+              <button
+                onClick={() => setIsChaosModalOpen(true)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60 hover:bg-rose-100 transition-colors whitespace-nowrap"
+              >
+                <ShieldCheck className="h-3.5 w-3.5 text-rose-600" />
+                <span>Chaos Outage Test</span>
+              </button>
+
+              <button
+                onClick={() => setIsBlueprintsModalOpen(true)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60 hover:bg-blue-100 transition-colors whitespace-nowrap"
+              >
+                <FileCheck className="h-3.5 w-3.5 text-blue-600" />
+                <span>Code Ownership &amp; ZIP</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Split Pane: Form Left, Scorecard Right */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Left Column: Data-Entry Form (5 cols) */}
+            <div className="lg:col-span-5 h-[800px] form-column">
+              <AdvisorForm
+                profile={profile}
+                onChangeProfile={handleChangeProfile}
+                categories={SCORECARD_CATEGORIES}
+                answers={answers}
+                onChangeAnswer={handleChangeAnswer}
+                onReset={handleReset}
+                validationErrors={validationErrors}
+              />
+            </div>
+
+            {/* Right Column: Live 8.5x11 Scorecard Preview (7 cols) */}
+            <div className="lg:col-span-7 h-[800px]">
+              <ScorecardPreview
+                profile={profile}
+                scorecard={scorecard}
+                categories={SCORECARD_CATEGORIES}
+                aiNarrative={aiNarrative}
+                isAiGenerating={isAiGenerating}
+                onGenerateAi={handleGenerateAi}
+                onPrint={handlePrint}
+                onDownloadHtml={handleDownloadHtml}
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* 5. Footer Specifications */}
+      <Footer />
+
+      {/* 6. Modals */}
+      <SchemaEditorModal
+        isOpen={isSchemaModalOpen}
+        onClose={() => setIsSchemaModalOpen(false)}
+      />
+      <BlueprintExporter
+        isOpen={isBlueprintsModalOpen}
+        onClose={() => setIsBlueprintsModalOpen(false)}
+      />
+      <RoiCostCalculator
+        isOpen={isRoiModalOpen}
+        onClose={() => setIsRoiModalOpen(false)}
+      />
+      <ChaosOutageModal
+        isOpen={isChaosModalOpen}
+        onClose={() => setIsChaosModalOpen(false)}
+      />
+    </div>
+  );
+}

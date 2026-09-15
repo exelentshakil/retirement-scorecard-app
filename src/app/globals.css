@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-canvas: #f8fafc;
+    --color-surface: #ffffff;
+    --color-surface-hover: #f1f5f9;
+    --color-panel: #ffffff;
+    --color-panel-subtle: #f8fafc;
+    --color-border: #e2e8f0;
+    --color-border-subtle: #edf2f7;
+    --color-border-focus: #3b82f6;
+
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748b;
+
+    /* Financial Advisory Brand Theme: Meridian Navy & Gold */
+    --color-brand: #0f2942;
+    --color-brand-accent: #2563eb;
+    --color-brand-gold: #d97706;
+
+    /* Traffic Light R/Y/G Indicators */
+    --color-status-green: #16a34a;
+    --color-status-green-bg: #f0fdf4;
+    --color-status-green-border: #bbf7d0;
+
+    --color-status-yellow: #ca8a04;
+    --color-status-yellow-bg: #fefce8;
+    --color-status-yellow-border: #fef08a;
+
+    --color-status-red: #dc2626;
+    --color-status-red-bg: #fef2f2;
+    --color-status-red-border: #fecaca;
+  }
+
+  .dark {
+    --color-canvas: #090d16;
+    --color-surface: #0f172a;
+    --color-surface-hover: #1e293b;
+    --color-panel: #0f172a;
+    --color-panel-subtle: #141e33;
+    --color-border: #1e293b;
+    --color-border-subtle: #162032;
+    --color-border-focus: #60a5fa;
+
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #94a3b8;
+    --color-text-muted: #64748b;
+
+    --color-brand: #1e3a8a;
+    --color-brand-accent: #3b82f6;
+    --color-brand-gold: #f59e0b;
+
+    --color-status-green: #22c55e;
+    --color-status-green-bg: rgba(34, 197, 94, 0.12);
+    --color-status-green-border: rgba(34, 197, 94, 0.3);
+
+    --color-status-yellow: #eab308;
+    --color-status-yellow-bg: rgba(234, 179, 8, 0.12);
+    --color-status-yellow-border: rgba(234, 179, 8, 0.3);
+
+    --color-status-red: #ef4444;
+    --color-status-red-bg: rgba(239, 68, 68, 0.12);
+    --color-status-red-border: rgba(239, 68, 68, 0.3);
+  }
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--color-canvas);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code, kbd, pre, .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom Scrollbar for Form Panels */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Print Optimization for Guaranteed 8.5 x 11-inch Letter Single-Page PDF */
+@media print {
+  @page {
+    size: letter portrait;
+    margin: 8mm 10mm 8mm 10mm;
+  }
+  
+  *, *:before, *:after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 10pt !important;
+  }
+
+  .no-print, nav, header, footer, .reviewer-tour, .bento-kpi, .form-column, .modal-backdrop {
+    display: none !important;
+  }
+
+  .print-only-container {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #scorecard-printable {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}

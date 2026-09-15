@@ -1,0 +1,414 @@
+"use client";
+
+import React, { useState } from "react";
+import {
+  ProspectProfile,
+  OverallScoreResult,
+  ScorecardCategory,
+} from "@/types/scorecard";
+import {
+  Printer,
+  Download,
+  Sparkles,
+  Shield,
+  ZoomIn,
+  ZoomOut,
+  Maximize2,
+  CheckCircle,
+  AlertTriangle,
+  XCircle,
+  FileText,
+  Clock,
+  ExternalLink,
+} from "lucide-react";
+import { AiNarrativeResponse } from "@/lib/ai";
+
+interface ScorecardPreviewProps {
+  profile: ProspectProfile;
+  scorecard: OverallScoreResult;
+  categories: ScorecardCategory[];
+  aiNarrative: AiNarrativeResponse | null;
+  isAiGenerating: boolean;
+  onGenerateAi: () => void;
+  onPrint: () => void;
+  onDownloadHtml: () => void;
+}
+
+export function ScorecardPreview({
+  profile,
+  scorecard,
+  categories,
+  aiNarrative,
+  isAiGenerating,
+  onGenerateAi,
+  onPrint,
+  onDownloadHtml,
+}: ScorecardPreviewProps) {
+  const [zoomLevel, setZoomLevel] = useState<"fit" | "75" | "100">("fit");
+
+  const getStatusBadge = (status: "green" | "yellow" | "red") => {
+    switch (status) {
+      case "green":
+        return {
+          bg: "bg-emerald-50 text-emerald-800 border-emerald-300",
+          dot: "bg-emerald-500",
+          bar: "bg-emerald-500",
+          label: "Optimal / On Track",
+        };
+      case "yellow":
+        return {
+          bg: "bg-amber-50 text-amber-800 border-amber-300",
+          dot: "bg-amber-500",
+          bar: "bg-amber-500",
+          label: "Needs Attention",
+        };
+      case "red":
+        return {
+          bg: "bg-rose-50 text-rose-800 border-rose-300",
+          dot: "bg-rose-500",
+          bar: "bg-rose-500",
+          label: "Critical Action",
+        };
+    }
+  };
+
+  const overallBadge = getStatusBadge(scorecard.overallStatus);
+  const yearsToRetire = Math.max(0, (profile.targetRetirementAge || 65) - (profile.currentAge || 58));
+  const estimatedSafeMonthlyDraw = Math.round(((profile.currentRetirementSavings || 0) * 0.04) / 12);
+
+  return (
+    <div className="flex flex-col h-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-xs overflow-hidden">
+      {/* Scorecard Control Toolbar */}
+      <div className="border-b border-[var(--color-border)] bg-[var(--color-panel-subtle)] p-3 flex flex-wrap items-center justify-between gap-3 no-print">
+        <div className="flex items-center gap-2">
+          <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+            Live 8.5 × 11-inch Portrait Preview
+          </span>
+          <span className="text-xs font-mono font-semibold text-[var(--color-text-muted)] bg-[var(--color-surface)] px-2 py-0.5 rounded border border-[var(--color-border)] hidden sm:inline-block">
+            Letter (8.5&quot; × 11&quot;)
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Zoom Selector */}
+          <div className="flex items-center bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-0.5 text-xs font-semibold">
+            <button
+              onClick={() => setZoomLevel("fit")}
+              className={`px-2 py-1 rounded transition-colors ${
+                zoomLevel === "fit" ? "bg-[var(--color-panel-subtle)] font-bold text-[var(--color-brand-accent)]" : "text-[var(--color-text-muted)]"
+              }`}
+            >
+              Fit
+            </button>
+            <button
+              onClick={() => setZoomLevel("75")}
+              className={`px-2 py-1 rounded transition-colors ${
+                zoomLevel === "75" ? "bg-[var(--color-panel-subtle)] font-bold text-[var(--color-brand-accent)]" : "text-[var(--color-text-muted)]"
+              }`}
+            >
+              75%
+            </button>
+            <button
+              onClick={() => setZoomLevel("100")}
+              className={`px-2 py-1 rounded transition-colors ${
+                zoomLevel === "100" ? "bg-[var(--color-panel-subtle)] font-bold text-[var(--color-brand-accent)]" : "text-[var(--color-text-muted)]"
+              }`}
+            >
+              100%
+            </button>
+          </div>
+
+          {/* Download Standalone HTML Button */}
+          <button
+            onClick={onDownloadHtml}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] transition-colors whitespace-nowrap shrink-0"
+            title="Download standalone offline HTML/PDF report"
+          >
+            <Download className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Export HTML</span>
+          </button>
+
+          {/* Direct Print to PDF */}
+          <button
+            onClick={onPrint}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-[var(--color-brand)] text-white hover:bg-slate-800 shadow-xs transition-colors whitespace-nowrap shrink-0"
+            title="Generate print-ready single-page PDF with exact letter portrait margins"
+          >
+            <Printer className="h-3.5 w-3.5" />
+            <span>Print PDF</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Preview Viewport Container */}
+      <div className="flex-1 overflow-y-auto overflow-x-auto p-4 sm:p-6 bg-slate-100 dark:bg-slate-950/60 flex justify-center">
+        {/* Printable 8.5 x 11-inch Portrait Sheet */}
+        <div
+          id="scorecard-printable"
+          style={{
+            width: zoomLevel === "100" ? "8.5in" : zoomLevel === "75" ? "6.37in" : "100%",
+            maxWidth: "8.5in",
+            minHeight: zoomLevel === "fit" ? "auto" : "11in",
+          }}
+          className="bg-white text-slate-900 rounded-lg shadow-xl border border-slate-200 p-6 sm:p-8 flex flex-col justify-between transition-all duration-200 font-sans"
+        >
+          {/* 1. Header & Institutional Branding */}
+          <div className="border-b-2 border-slate-900 pb-4 mb-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#0f2942] text-white font-serif font-bold text-xl shadow-xs">
+                  M
+                </div>
+                <div>
+                  <h1 className="text-base sm:text-lg font-extrabold tracking-tight text-[#0f2942] uppercase font-sans">
+                    {profile.advisoryFirm || "Blue Ridge & Meridian Wealth Partners"}
+                  </h1>
+                  <p className="text-[10px] sm:text-xs font-semibold tracking-wider text-slate-500 uppercase">
+                    Private Wealth Management • Comprehensive Retirement Diagnostic
+                  </p>
+                </div>
+              </div>
+              <div className="text-right shrink-0">
+                <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-300">
+                  Confidential Scorecard
+                </span>
+                <p className="text-[10px] text-slate-500 mt-1 font-mono">
+                  Date: {profile.assessmentDate || new Date().toISOString().split("T")[0]}
+                </p>
+              </div>
+            </div>
+
+            {/* Client & Advisor Metadata Bar */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 pt-3 border-t border-slate-200 text-xs">
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Primary Client
+                </span>
+                <span className="font-bold text-slate-900 truncate block">
+                  {profile.clientName || "Client Name"}
+                </span>
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Age / Target Retirement
+                </span>
+                <span className="font-bold text-slate-900 block font-mono">
+                  Age {profile.currentAge} ➔ Retire at {profile.targetRetirementAge} ({yearsToRetire} yrs)
+                </span>
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Invested Assets
+                </span>
+                <span className="font-bold text-slate-900 block font-mono">
+                  ${(profile.currentRetirementSavings || 0).toLocaleString()}
+                </span>
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Lead Advisor
+                </span>
+                <span className="font-bold text-slate-900 truncate block">
+                  {profile.advisorName || "Lead Advisor, CFP®"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 2. Executive Readiness Overview (Gauge & Actuarial Summary) */}
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 mb-4 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            {/* Left Gauge Box */}
+            <div className="sm:col-span-4 flex flex-col items-center justify-center p-3 rounded-lg bg-white border border-slate-200 shadow-xs text-center">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
+                Retirement Readiness Score
+              </span>
+              <div className="relative flex items-center justify-center my-1">
+                <div className="text-4xl sm:text-5xl font-extrabold font-mono text-[#0f2942] tabular-nums tracking-tight">
+                  {scorecard.overallScore}
+                </div>
+                <span className="text-xs font-bold text-slate-400 ml-1">/100</span>
+              </div>
+              <div
+                className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold border mt-1 ${overallBadge.bg}`}
+              >
+                <span className={`h-2 w-2 rounded-full ${overallBadge.dot}`} />
+                <span>{scorecard.overallStatusLabel}</span>
+              </div>
+            </div>
+
+            {/* Right Diagnostic Summary */}
+            <div className="sm:col-span-8 flex flex-col justify-between">
+              <div>
+                <h3 className="text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-tight flex items-center gap-1.5 mb-1">
+                  <Shield className="h-4 w-4 text-[#0f2942]" />
+                  <span>Executive Readiness Diagnostic</span>
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {scorecard.readinessSummary}
+                </p>
+              </div>
+
+              {/* Financial Runway Snapshot */}
+              <div className="grid grid-cols-3 gap-2 pt-2 mt-2 border-t border-slate-200 text-center text-xs">
+                <div className="p-1.5 rounded bg-white border border-slate-200">
+                  <span className="text-[9px] text-slate-400 uppercase font-bold block">Target Monthly</span>
+                  <span className="font-mono font-bold text-slate-900">
+                    ${(profile.targetMonthlyRetirementIncome || 0).toLocaleString()}
+                  </span>
+                </div>
+                <div className="p-1.5 rounded bg-white border border-slate-200">
+                  <span className="text-[9px] text-slate-400 uppercase font-bold block">Safe 4% Draw</span>
+                  <span className="font-mono font-bold text-slate-900">
+                    ${estimatedSafeMonthlyDraw.toLocaleString()}/mo
+                  </span>
+                </div>
+                <div className="p-1.5 rounded bg-white border border-slate-200">
+                  <span className="text-[9px] text-slate-400 uppercase font-bold block">Pillar Status</span>
+                  <span className="font-mono font-bold text-slate-900">
+                    {scorecard.statusCounts.green}G • {scorecard.statusCounts.yellow}Y • {scorecard.statusCounts.red}R
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. The 5 Core Pillars Breakdown Table */}
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-800">
+                Core Planning Pillar Diagnostics
+              </h3>
+              <span className="text-[10px] text-slate-400 font-mono">
+                5 Pillars • Weighted Evaluation
+              </span>
+            </div>
+
+            <div className="border border-slate-200 rounded-lg overflow-hidden">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="bg-slate-100 text-slate-600 border-b border-slate-200 text-[10px] font-bold uppercase tracking-wider">
+                    <th className="py-2 px-3 w-[26%]">Pillar Category</th>
+                    <th className="py-2 px-2 w-[14%] text-center">Score</th>
+                    <th className="py-2 px-2 w-[16%] text-center">Status</th>
+                    <th className="py-2 px-3 w-[44%]">Diagnostic Takeaway & Recommended Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  {scorecard.categoryResults.map((cat) => {
+                    const badge = getStatusBadge(cat.status);
+                    return (
+                      <tr key={cat.categoryId} className="hover:bg-slate-50/60 transition-colors">
+                        <td className="py-2 px-3 align-top">
+                          <span className="font-bold text-slate-900 block leading-tight">
+                            {cat.shortTitle}
+                          </span>
+                          <span className="text-[10px] text-slate-400">
+                            Weight: 20%
+                          </span>
+                        </td>
+                        <td className="py-2 px-2 align-top text-center font-mono">
+                          <div className="font-bold text-slate-900">
+                            {cat.percentageScore}%
+                          </div>
+                          <div className="w-16 mx-auto h-1.5 bg-slate-200 rounded-full overflow-hidden mt-1">
+                            <div
+                              className={`h-full ${badge.bar}`}
+                              style={{ width: `${cat.percentageScore}%` }}
+                            />
+                          </div>
+                        </td>
+                        <td className="py-2 px-2 align-top text-center">
+                          <span
+                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border whitespace-nowrap ${badge.bg}`}
+                          >
+                            <span className={`h-1.5 w-1.5 rounded-full ${badge.dot}`} />
+                            <span>{badge.label}</span>
+                          </span>
+                        </td>
+                        <td className="py-2 px-3 align-top">
+                          <p className="text-[11px] font-medium text-slate-800 leading-snug">
+                            {cat.keyFinding}
+                          </p>
+                          <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">
+                            <strong className="text-slate-700">Action:</strong> {cat.recommendedAction}
+                          </p>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* 4. Advisor Strategic Narrative & AI Copilot Section */}
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 mb-4">
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <div className="flex items-center gap-1.5">
+                <FileText className="h-3.5 w-3.5 text-[#0f2942]" />
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                  Advisor Executive Commentary
+                </h4>
+              </div>
+              {aiNarrative && (
+                <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-white border border-slate-300 text-slate-600">
+                  {aiNarrative.provider.toUpperCase()} • {aiNarrative.model} • {aiNarrative.latencyMs}ms
+                </span>
+              )}
+            </div>
+
+            <div className="text-[11px] text-slate-700 leading-relaxed space-y-1.5">
+              {aiNarrative ? (
+                aiNarrative.narrative.split("\n\n").map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))
+              ) : (
+                <p className="italic text-slate-500">
+                  &quot;Based on the initial diagnostic, the Vance household has established a solid asset base but requires proactive withdrawal sequencing and healthcare bridge planning to eliminate sequence of returns vulnerability.&quot; (Click &apos;AI Commentary&apos; in header to generate full executive review).
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* 5. Priority Action Plan & Next Steps */}
+          <div className="mb-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 mb-2">
+              Prioritized Strategic Action Plan
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+              {scorecard.priorityActions.map((action, idx) => (
+                <div
+                  key={idx}
+                  className="p-2.5 rounded-lg bg-white border border-slate-200 shadow-xs flex items-start gap-2"
+                >
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#0f2942] text-white text-[10px] font-bold font-mono">
+                    {idx + 1}
+                  </span>
+                  <p className="text-[10px] text-slate-700 leading-snug font-medium">
+                    {action}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 6. Professional Sign-off & Compliance Disclosures */}
+          <div className="border-t border-slate-300 pt-3 mt-auto text-[9px] text-slate-500">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2 font-mono">
+              <div>
+                Prepared by: <strong className="text-slate-800">{profile.advisorName || "Lead Advisor, CFP®"}</strong> • {profile.advisoryFirm}
+              </div>
+              <div>
+                Tel: {profile.firmPhone || "(540) 555-0194"} • Email: {profile.firmEmail || "advisory@meridianwealth.com"}
+              </div>
+            </div>
+            <p className="leading-tight text-slate-400">
+              IMPORTANT COMPLIANCE DISCLOSURE: This Retirement Readiness Scorecard is provided for informational and educational purposes only and does not constitute formal legal, tax, or investment advice. Projections are based on client-provided inputs, actuarial estimates, and standardized assumptions. Past performance does not guarantee future results. Securities and advisory services offered through Blue Ridge &amp; Meridian Wealth Partners LLC, an SEC-registered investment adviser.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
