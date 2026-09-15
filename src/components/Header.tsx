@@ -50,7 +50,7 @@ export function Header({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-3">
           {/* Left: Firm Identity & Cockpit Context */}
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-3 shrink-0">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--color-brand)] text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10">
               <span className="font-serif font-bold text-lg tracking-tight">M</span>
             </div>
@@ -101,11 +101,6 @@ export function Header({
                     >
                       <span className={`h-1.5 w-1.5 rounded-full ${dotColor} shrink-0`} />
                       <span>{p.firstName || p.shortName}</span>
-                      {p.lastName && (
-                        <span className="hidden xl:inline text-[var(--color-text-muted)] font-normal">
-                          {p.lastName}
-                        </span>
-                      )}
                     </button>
                   );
                 })}
