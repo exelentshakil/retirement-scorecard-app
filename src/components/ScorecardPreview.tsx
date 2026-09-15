@@ -147,15 +147,14 @@ export function ScorecardPreview({
         <div
           id="scorecard-printable"
           style={{
-            width: zoomLevel === "100" ? "8.5in" : zoomLevel === "75" ? "6.37in" : "100%",
+            width: zoomLevel === "100" ? "8.5in" : zoomLevel === "75" ? "6.375in" : "100%",
             maxWidth: "8.5in",
-            minHeight: "fit-content",
-            height: "fit-content",
+            minHeight: zoomLevel === "100" ? "11in" : zoomLevel === "75" ? "8.25in" : "11in",
           }}
           className="bg-white text-slate-900 rounded-lg shadow-xl border border-slate-200 p-6 flex flex-col justify-between transition-all duration-200 font-sans shrink-0"
         >
           {/* 1. Header & Institutional Branding */}
-          <div className="border-b-2 border-slate-900 pb-3 mb-3">
+          <div className="border-b-2 border-slate-900 pb-3 mb-3 section-header">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0 flex-1">
                 <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg bg-[#0f2942] text-white font-serif font-bold text-lg sm:text-xl shadow-xs">
@@ -381,7 +380,7 @@ export function ScorecardPreview({
               {scorecard.priorityActions.map((action, idx) => (
                 <div
                   key={idx}
-                  className="p-2 rounded-lg bg-white border border-slate-200 shadow-xs flex items-start gap-2"
+                  className="p-2 rounded-lg bg-white border border-slate-200 shadow-xs flex items-start gap-2 action-plan-card"
                 >
                   <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#0f2942] text-white text-[10px] font-bold font-mono">
                     {idx + 1}
