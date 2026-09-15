@@ -218,7 +218,7 @@ export default function HomePage() {
     @media print {
       @page {
         size: letter portrait;
-        margin: 8mm 8mm 8mm 8mm;
+        margin: 6mm 8mm 6mm 8mm;
       }
       *, *:before, *:after {
         -webkit-print-color-adjust: exact !important;
@@ -243,13 +243,32 @@ export default function HomePage() {
         border: none !important;
         width: 100% !important;
         max-width: 100% !important;
+        padding: 16px 20px !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
         page-break-after: avoid !important;
         break-after: avoid !important;
+        background: #ffffff !important;
       }
       #scorecard-printable .grid {
         display: grid !important;
+      }
+      #scorecard-printable .mb-3 {
+        margin-bottom: 7px !important;
+      }
+      #scorecard-printable .pb-3 {
+        padding-bottom: 6px !important;
+      }
+      #scorecard-printable .p-3 {
+        padding: 6px 10px !important;
+      }
+      #scorecard-printable .p-2 {
+        padding: 6px 8px !important;
+      }
+      #scorecard-printable table th,
+      #scorecard-printable table td {
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
       }
     }
   </style>

@@ -103,7 +103,7 @@ code, kbd, pre, .font-mono {
 @media print {
   @page {
     size: letter portrait;
-    margin: 8mm 8mm 8mm 8mm;
+    margin: 6mm 8mm 6mm 8mm;
   }
   
   *, *:before, *:after {
@@ -181,6 +181,7 @@ code, kbd, pre, .font-mono {
     width: 100% !important;
     height: auto !important;
     margin: 0 auto !important;
+    padding: 16px 20px !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     page-break-after: avoid !important;
@@ -191,5 +192,24 @@ code, kbd, pre, .font-mono {
   /* Guarantee internal grids remain grids during printing */
   #scorecard-printable .grid {
     display: grid !important;
+  }
+
+  /* Precision print spacing to guarantee 100% single letter portrait page */
+  #scorecard-printable .mb-3 {
+    margin-bottom: 7px !important;
+  }
+  #scorecard-printable .pb-3 {
+    padding-bottom: 6px !important;
+  }
+  #scorecard-printable .p-3 {
+    padding: 6px 10px !important;
+  }
+  #scorecard-printable .p-2 {
+    padding: 6px 8px !important;
+  }
+  #scorecard-printable table th,
+  #scorecard-printable table td {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
   }
 }
