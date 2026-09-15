@@ -277,6 +277,11 @@ export const SCORECARD_CATEGORIES: ScorecardCategory[] = [
 export const SAMPLE_PERSONAS = [
   {
     id: "persona_vance",
+    shortName: "Robert Vance",
+    firstName: "Robert",
+    lastName: "Vance",
+    statusColor: "yellow",
+    score: 61,
     label: "Robert & Eleanor Vance (Age 58)",
     badge: "Typical Pre-Retiree • Score ~73",
     description: "Solid 401k savings ($1.15M), but heavy tax-deferred concentration and missing long-term care protection.",
@@ -317,6 +322,11 @@ export const SAMPLE_PERSONAS = [
   },
   {
     id: "persona_sterling",
+    shortName: "Marcus Sterling",
+    firstName: "Marcus",
+    lastName: "Sterling",
+    statusColor: "red",
+    score: 18,
     label: "Marcus Sterling (Age 48)",
     badge: "Under-prepared Executive • Score ~46",
     description: "High earner ($290k), but negligible emergency buffer, aggressive equity concentration, and zero estate plan.",
@@ -357,6 +367,11 @@ export const SAMPLE_PERSONAS = [
   },
   {
     id: "persona_chen",
+    shortName: "Dr. Chen",
+    firstName: "Dr. Chen",
+    lastName: "",
+    statusColor: "green",
+    score: 100,
     label: "Dr. Arthur & Helen Chen (Age 64)",
     badge: "Retirement Ready • Score ~93",
     description: "Physician couple with comprehensive pensions, diversified Roth balances, hybrid LTC policy, and current trusts.",

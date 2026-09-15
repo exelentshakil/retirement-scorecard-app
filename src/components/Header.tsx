@@ -13,6 +13,7 @@ import {
   Shield,
   FileSpreadsheet,
   Zap,
+  Users,
 } from "lucide-react";
 import { SAMPLE_PERSONAS } from "@/lib/scorecard-config";
 import { ProspectProfile } from "@/types/scorecard";
@@ -72,27 +73,43 @@ export function Header({
           {/* Center/Right: Action Controls */}
           <div className="flex items-center gap-2 shrink-0">
             {/* Persona Quick Loader */}
-            <div className="hidden lg:flex items-center gap-1 bg-[var(--color-panel-subtle)] p-0.5 rounded-lg border border-[var(--color-border)] shrink-0">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] px-1.5">
-                Persona:
-              </span>
-              {SAMPLE_PERSONAS.map((p) => {
-                const isSelected = activePersonaId === p.id;
-                return (
-                  <button
-                    key={p.id}
-                    onClick={() => onLoadPersona(p.id)}
-                    title={p.description}
-                    className={`px-2 py-0.5 text-xs font-semibold rounded-md transition-all whitespace-nowrap shrink-0 ${
-                      isSelected
-                        ? "bg-[var(--color-surface)] text-[var(--color-brand-accent)] shadow-xs border border-[var(--color-border)]"
-                        : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface)]/60"
-                    }`}
-                  >
-                    {p.label.split(" ")[0]}
-                  </button>
-                );
-              })}
+            <div className="hidden lg:flex items-center gap-1.5 bg-[var(--color-panel-subtle)] p-1 rounded-xl border border-[var(--color-border)] shadow-2xs shrink-0">
+              <div className="flex items-center gap-1 px-2 text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)] select-none">
+                <Users className="h-3.5 w-3.5 text-[var(--color-text-muted)] shrink-0" />
+                <span className="hidden xl:inline">Persona:</span>
+              </div>
+              <div className="flex items-center gap-1">
+                {SAMPLE_PERSONAS.map((p) => {
+                  const isSelected = activePersonaId === p.id;
+                  const dotColor =
+                    p.statusColor === "green"
+                      ? "bg-emerald-500"
+                      : p.statusColor === "yellow"
+                      ? "bg-amber-500"
+                      : "bg-rose-500";
+
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => onLoadPersona(p.id)}
+                      title={`${p.label} • ${p.badge}\n${p.description}`}
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap shrink-0 ${
+                        isSelected
+                          ? "bg-[var(--color-surface)] text-[var(--color-brand-accent)] shadow-xs border border-[var(--color-border)] font-bold ring-1 ring-black/5 dark:ring-white/10"
+                          : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface)]/60 border border-transparent"
+                      }`}
+                    >
+                      <span className={`h-1.5 w-1.5 rounded-full ${dotColor} shrink-0`} />
+                      <span>{p.firstName || p.shortName}</span>
+                      {p.lastName && (
+                        <span className="hidden xl:inline text-[var(--color-text-muted)] font-normal">
+                          {p.lastName}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* AI Narrative Copilot */}
