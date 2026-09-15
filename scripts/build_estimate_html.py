@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 """
-Single-Page PDF Estimate Generator for Jim Martin (Retirement Scorecard Web App)
-Strictly adheres to BarakahSoft 6 Direct Flex Children Mandate (Zero Middle Void)
-and accurate Upwork partner credentials.
+Production Scope & Formal Estimate Generator
+Web App for Retirement Scorecard — Client: Jim Martin (Christiansburg, VA, USA)
+Built to exact BarakahSoft Gold-Standard Architecture:
+- 6 Direct Flex Children (Zero Middle Void)
+- High-Density 6-Row Scope Table with Percentage Allocations
+- Verified Upwork Partner Credentials (Never "Top Rated")
+- Dual Signature Block with Formal Authorization
+- Inlined Base64 Assets and Headless Chrome Single-Page PDF Audit
 """
 
 import os
@@ -11,28 +16,27 @@ import base64
 import subprocess
 import sys
 
-def get_base64_image(file_path):
-    if not os.path.exists(file_path):
-        print(f"Error: Asset not found: {file_path}", file=sys.stderr)
-        return ""
-    with open(file_path, "rb") as f:
-        data = f.read()
-    ext = os.path.splitext(file_path)[1].lower()
-    mime = "image/jpeg" if ext in [".jpg", ".jpeg"] else "image/png"
-    return f"data:{mime};base64,{base64.b64encode(data).decode('utf-8')}"
+def build_estimate():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_dir = os.path.abspath(os.path.join(current_dir, ".."))
+    docs_dir = os.path.join(project_dir, "docs")
+    html_path = os.path.join(docs_dir, "estimate.html")
+    pdf_path = os.path.join(docs_dir, "ESTIMATE.pdf")
 
-def build_html():
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    docs_dir = os.path.join(base_dir, "docs")
-    
-    headshot_b64 = get_base64_image(os.path.join(docs_dir, "headshot.jpeg"))
-    logo_b64 = get_base64_image(os.path.join(docs_dir, "logo.png"))
-    
+    headshot_file = os.path.join(docs_dir, "headshot.jpeg")
+    logo_file = os.path.join(docs_dir, "logo.png")
+
+    with open(headshot_file, "rb") as f:
+        headshot_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+    with open(logo_file, "rb") as f:
+        logo_b64 = base64.b64encode(f.read()).decode("utf-8")
+
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Engineering Scope & Commercial Estimate — Web App for Retirement Scorecard</title>
+  <title>Production Scope & Formal Estimate - Web App for Retirement Scorecard</title>
   <style>
     @page {{
       size: letter portrait;
@@ -40,8 +44,8 @@ def build_html():
     }}
     * {{
       box-sizing: border-box;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }}
     html, body {{
       margin: 0;
@@ -53,480 +57,652 @@ def build_html():
     body {{
       font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: #0f172a;
-      line-height: 1.30;
+      line-height: 1.32;
       font-size: 9.4px;
     }}
-    
-    /* THE 6 DIRECT FLEX CHILDREN ROOT CONTAINER */
+
     .page-container {{
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
       box-sizing: border-box;
+      gap: 6px;
     }}
-    
-    /* 1. EXECUTIVE HEADER & METADATA */
+
+    /* 1. Executive Header */
     .header {{
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
+      gap: 12px;
       border-bottom: 2px solid #0f2942;
       padding-bottom: 6px;
+    }}
+    .header-left {{
+      flex: 1;
+      min-width: 0;
     }}
     .brand-title {{
       font-size: 8.5px;
       font-weight: 800;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: #1d4ed8;
+      color: #0284c7;
       margin-bottom: 2px;
       white-space: nowrap;
     }}
     h1 {{
-      margin: 0;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       color: #0f2942;
+      margin: 0 0 2px 0;
       letter-spacing: -0.02em;
+      line-height: 1.18;
       white-space: nowrap;
     }}
     .subtitle {{
-      margin: 1px 0 0 0;
-      font-size: 9.0px;
+      font-size: 8.6px;
       color: #475569;
-      font-weight: 500;
+      margin: 0;
+      line-height: 1.25;
       white-space: nowrap;
     }}
     .meta-card {{
+      flex-shrink: 0;
       background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #cbd5e1;
       border-radius: 6px;
-      padding: 5px 9px;
+      padding: 5px 10px;
+      font-size: 8.3px;
       text-align: right;
-      font-size: 8.4px;
-      line-height: 1.35;
+      line-height: 1.36;
       white-space: nowrap;
     }}
-    .meta-row {{
-      display: flex;
-      justify-content: flex-end;
-      gap: 6px;
-    }}
-    .meta-label {{
-      color: #64748b;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 7.5px;
-    }}
-    .meta-val {{
+    .meta-card strong {{
       color: #0f172a;
-      font-weight: 700;
     }}
-    
-    /* 2. MILESTONE SCOPE TABLE */
+    .live-badge {{
+      display: inline-block;
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 9999px;
+      font-size: 8px;
+      text-transform: uppercase;
+      margin-left: 3px;
+    }}
+
+    /* 2. Scope & Milestones Table */
     .scope-block {{
-      margin-top: 5px;
+      margin-top: 0;
+    }}
+    .section-header {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3.5px;
     }}
     .section-title {{
-      font-size: 9.2px;
+      font-size: 9.6px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #0f2942;
+      border-left: 3px solid #0284c7;
+      padding-left: 6px;
+      margin: 0;
+    }}
+    .section-meta {{
+      font-size: 8.2px;
+      color: #64748b;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }}
+    table {{
+      width: 100%;
+      border-collapse: collapse;
+    }}
+    th {{
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 8.2px;
+      letter-spacing: 0.04em;
+      border: 1px solid #cbd5e1;
+      padding: 3.8px 6px;
+      text-align: left;
+    }}
+    td {{
+      border: 1px solid #e2e8f0;
+      padding: 3.8px 6px;
+      font-size: 8.5px;
+      vertical-align: top;
+    }}
+    .phase-num {{
+      font-weight: 800;
+      color: #1e293b;
+      font-size: 8.5px;
+      white-space: nowrap;
+    }}
+    .phase-name {{
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 8.8px;
+    }}
+    .phase-desc {{
+      color: #475569;
+      font-size: 7.9px;
+      margin-top: 1px;
+      line-height: 1.22;
+    }}
+    .phase-0-row {{
+      background: #f0fdf4;
+    }}
+    .phase-0-badge {{
+      color: #15803d;
+      font-weight: 800;
+    }}
+    .total-row {{
+      background: #0f172a;
+      color: #ffffff;
+      font-weight: 800;
+      border: 1px solid #0f172a;
+    }}
+    .total-row td {{
+      border: 1px solid #0f172a;
+      padding: 4.2px 6px;
+      font-size: 8.8px;
+    }}
+
+    /* 3. 2-Column Technical & Financial Breakdown */
+    .grid-2col {{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }}
+    .card-box {{
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #f8fafc;
+      padding: 5px 9px;
+    }}
+    .card-box-title {{
+      font-size: 8.4px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: #0f2942;
-      margin-bottom: 3px;
+      margin: 0 0 3px 0;
       display: flex;
       align-items: center;
-      gap: 5px;
-    }}
-    .section-title::before {{
-      content: "";
-      display: inline-block;
-      width: 3px;
-      height: 9px;
-      background: #2563eb;
-      border-radius: 1px;
-    }}
-    table.scope-table {{
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 8.6px;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      overflow: hidden;
-    }}
-    table.scope-table th {{
-      background: #0f2942;
-      color: #ffffff;
-      text-align: left;
-      padding: 4px 6px;
-      font-size: 8.0px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }}
-    table.scope-table td {{
-      padding: 4.5px 6px;
+      gap: 4px;
       border-bottom: 1px solid #e2e8f0;
-      vertical-align: top;
-    }}
-    table.scope-table tr:nth-child(even) td {{
-      background: #f8fafc;
-    }}
-    table.scope-table tfoot td {{
-      background: #0f172a !important;
-      color: #ffffff !important;
-      font-weight: 800 !important;
-      font-size: 9.0px !important;
-      border: none;
-      padding: 5px 6px;
-    }}
-    .phase-badge {{
-      display: inline-block;
-      background: #e0f2fe;
-      color: #0369a1;
-      font-weight: 700;
-      font-size: 7.5px;
-      padding: 1px 4px;
-      border-radius: 3px;
-      text-transform: uppercase;
-    }}
-    .ready-badge {{
-      display: inline-block;
-      background: #dcfce7;
-      color: #15803d;
-      font-weight: 700;
-      font-size: 7.5px;
-      padding: 1px 4px;
-      border-radius: 3px;
-    }}
-    
-    /* 3. 2-COLUMN MODULAR SPECIFICATION GRID */
-    .grid-2col {{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 4px;
-    }}
-    .card-box {{
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 5px;
-      padding: 6px 8px;
-    }}
-    .card-box h3 {{
-      margin: 0 0 4px 0;
-      font-size: 8.8px;
-      font-weight: 800;
-      color: #0f2942;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      border-bottom: 1px solid #cbd5e1;
       padding-bottom: 2px;
     }}
-    .item-list {{
-      margin: 0;
-      padding-left: 12px;
-      font-size: 8.2px;
+    .milestone-item {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px dotted #cbd5e1;
+      padding: 2px 0;
+      font-size: 7.8px;
+    }}
+    .milestone-item:last-child {{
+      border-bottom: none;
+      padding-bottom: 0;
+    }}
+    .milestone-name {{
       color: #334155;
     }}
-    .item-list li {{
-      margin-bottom: 2.5px;
-    }}
-    .item-list strong {{
+    .milestone-val {{
+      font-weight: 800;
       color: #0f172a;
+      font-family: ui-monospace, monospace;
+      white-space: nowrap;
     }}
-    
-    /* 4. COMMERCIAL TERMS BOX (4-COLUMN) */
+    .guardrail-item {{
+      font-size: 7.8px;
+      color: #334155;
+      margin-bottom: 2px;
+      padding-left: 10px;
+      position: relative;
+      line-height: 1.22;
+    }}
+    .guardrail-item:last-child {{
+      margin-bottom: 0;
+    }}
+    .guardrail-item::before {{
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #16a34a;
+      font-weight: 800;
+      font-size: 7.5px;
+    }}
+
+    /* 4. Commercial Terms Section */
     .terms-box {{
-      background: #ffffff;
       border: 1px solid #cbd5e1;
-      border-radius: 5px;
-      padding: 6px 8px;
-      margin-top: 4px;
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 5px 9px;
     }}
     .terms-grid {{
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      font-size: 7.8px;
+      gap: 8px;
     }}
-    .term-item {{
-      border-left: 2px solid #2563eb;
-      padding-left: 5px;
+    .term-col {{
+      font-size: 7.8px;
+      line-height: 1.22;
     }}
     .term-title {{
       font-weight: 800;
-      color: #0f2942;
+      color: #0284c7;
       text-transform: uppercase;
-      font-size: 7.4px;
+      font-size: 7.7px;
       margin-bottom: 1px;
     }}
-    .term-desc {{
+    .term-body {{
       color: #475569;
-      line-height: 1.25;
     }}
-    
-    /* 5. FORMAL ACCEPTANCE AUTHORIZATION */
+
+    /* 5. Formal Acceptance Authorization Block */
     .auth-block {{
+      border: 1px solid #94a3b8;
+      border-radius: 6px;
       background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 5px;
-      padding: 6px 10px;
-      margin-top: 4px;
+      padding: 6px 11px;
     }}
-    .sig-grid {{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }}
-    .sig-col {{
-      display: flex;
-      flex-direction: column;
-    }}
-    .sig-line {{
-      border-bottom: 1px solid #94a3b8;
-      height: 18px;
-      display: flex;
-      align-items: flex-end;
-      padding-bottom: 2px;
-    }}
-    .sig-cursive {{
-      font-family: 'Brush Script MT', 'Apple Chancery', 'Segoe Script', cursive;
-      font-size: 15px;
-      color: #1e3a8a;
-      line-height: 1;
-    }}
-    .sig-label {{
-      font-size: 7.6px;
-      font-weight: 700;
-      color: #64748b;
+    .auth-title {{
+      font-size: 8.4px;
+      font-weight: 800;
       text-transform: uppercase;
-      margin-top: 2px;
-    }}
-    .sig-client-tag {{
-      font-size: 8.0px;
-      color: #0f766e;
-      font-weight: 700;
-    }}
-    
-    /* 6. EXECUTIVE SIGNATURE FOOTER */
-    .footer-container {{
+      letter-spacing: 0.05em;
+      color: #0f172a;
+      margin-bottom: 3.5px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top: 1.5px solid #e2e8f0;
-      padding-top: 5px;
-      margin-top: 4px;
-      font-size: 7.8px;
-      color: #64748b;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 2px;
     }}
-    .footer-left {{
+    .auth-grid {{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }}
+    .auth-party {{
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 7.9px;
+    }}
+    .auth-party-title {{
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      font-size: 7.8px;
+      margin-bottom: 1px;
+    }}
+    .auth-sign-line {{
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      margin-top: 3px;
+    }}
+    .auth-sign-field {{
+      flex: 1;
+      border-bottom: 1.2px solid #475569;
+      min-height: 22px;
+      display: flex;
+      align-items: flex-end;
+      font-family: "Brush Script MT", "Caveat", cursive, sans-serif;
+      font-size: 14px;
+      color: #0f2942;
+      padding-left: 4px;
+      padding-bottom: 1px;
+    }}
+    .auth-date-field {{
+      width: 90px;
+      border-bottom: 1.2px solid #475569;
+      min-height: 22px;
+      font-family: ui-monospace, monospace;
+      font-size: 8px;
+      color: #334155;
+      text-align: center;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 1px;
+      white-space: nowrap;
+    }}
+    .auth-label {{
+      font-size: 7px;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-top: 1.5px;
+    }}
+
+    /* 6. Executive Signature Footer */
+    .footer-container {{
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #f8fafc;
+      padding: 5px 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }}
+    .footer-founder {{
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 9px;
+      flex: 1;
+      min-width: 0;
     }}
-    .footer-avatar {{
-      width: 32px;
-      height: 32px;
+    .founder-avatar {{
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      border: 1.5px solid #0f2942;
       object-fit: cover;
+      border: 1.5px solid #0f2942;
+      flex-shrink: 0;
     }}
-    .footer-logo {{
-      height: 15px;
+    .founder-info {{
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }}
+    .founder-name {{
+      font-size: 8.8px;
+      color: #0f172a;
+      line-height: 1.18;
+      white-space: nowrap;
+    }}
+    .founder-name strong {{
+      color: #0f172a;
+      font-weight: 800;
+    }}
+    .founder-company {{
+      font-size: 8px;
+      color: #334155;
+      line-height: 1.18;
+      white-space: nowrap;
+    }}
+    .founder-company strong {{
+      color: #1e293b;
+      font-weight: 700;
+    }}
+    .founder-sub {{
+      font-size: 7.5px;
+      color: #475569;
+      line-height: 1.18;
+      white-space: nowrap;
+    }}
+    .footer-brand {{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2.5px;
+      flex-shrink: 0;
+    }}
+    .business-logo {{
+      height: 17px;
       width: auto;
       object-fit: contain;
     }}
-    .footer-meta {{
-      line-height: 1.25;
-    }}
-    .footer-meta strong {{
-      color: #0f2942;
-      font-size: 8.2px;
-    }}
-    .footer-right {{
-      text-align: right;
-      line-height: 1.25;
-    }}
-    .demo-tag {{
-      display: inline-block;
-      background: #1e293b;
-      color: #38bdf8;
-      font-weight: 700;
-      padding: 1.5px 5px;
+    .demo-badge {{
+      font-size: 7.6px;
+      color: #0369a1;
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      padding: 1.5px 6px;
       border-radius: 3px;
-      font-size: 7.4px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
+      font-weight: 700;
+      font-family: ui-monospace, monospace;
+      text-decoration: none;
+      white-space: nowrap;
     }}
   </style>
 </head>
 <body>
+<div class="page-container">
 
-  <div class="page-container">
-    <!-- 1. EXECUTIVE HEADER & METADATA -->
-    <div class="header">
-      <div>
-        <div class="brand-title">BarakahSoft LLC • Systems Engineering • Ref #BS-2026-RET-031</div>
-        <h1>Web App for Retirement Scorecard — Advisory Platform</h1>
-        <div class="subtitle">Client Discovery &amp; Delivery Scope Prepared for: Jim Martin • Christiansburg, VA, USA</div>
+  <!-- 1. Executive Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="brand-title">BarakahSoft LLC • Systems Architecture • Ref #BS-2026-RET-SCORE</div>
+      <h1>Web App for Retirement Scorecard — Advisory Diagnostics Engine</h1>
+      <p class="subtitle">Clean Prospect Intake • Decoupled 5-Pillar Scoring • 8.5×11 Letter Print Lock • Zero-PII In-Memory Storage</p>
+    </div>
+    <div class="meta-card">
+      <div><strong>Client:</strong> Jim Martin (Christiansburg, VA, USA)</div>
+      <div><strong>Timeline:</strong> 3–4 Business Days (Turnkey Delivery)</div>
+      <div><strong>Turnkey Package:</strong> <strong>$300.00 Fixed USD</strong></div>
+      <div><strong>Live Prototype:</strong> <span class="live-badge">Verified &amp; Operational</span></div>
+    </div>
+  </div>
+
+  <!-- 2. Scope Table -->
+  <div class="scope-block">
+    <div class="section-header">
+      <h2 class="section-title">Production Scope &amp; Milestone Delivery Schedule</h2>
+      <div class="section-meta">Live Cockpit: https://retirement-scorecard-app.vercel.app</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 12%;">Milestone</th>
+          <th style="width: 58%;">Architecture &amp; Production Engineering Deliverables</th>
+          <th style="width: 10%; text-align: center;">Timeline</th>
+          <th style="width: 8%; text-align: center;">Share</th>
+          <th style="width: 12%; text-align: right;">Investment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="phase-0-row">
+          <td class="phase-num"><span class="phase-0-badge">Phase 0</span></td>
+          <td>
+            <div class="phase-name">Interactive Architecture Prototype &amp; Operational Cockpit (Live)</div>
+            <div class="phase-desc">Working 5-pillar advisory questionnaire, live mathematical scoring calculation, R/Y/G status indicators, dual-provider OpenAI/Gemini AI narrative engine, and live 8.5x11 portrait preview. Built upfront to de-risk delivery.</div>
+          </td>
+          <td style="text-align: center; font-weight: 700; white-space: nowrap;">Live Now</td>
+          <td style="text-align: center; color: #16a34a; font-weight: 700;">Included</td>
+          <td style="text-align: right; font-weight: 800; color: #16a34a;">$0.00 (Live)</td>
+        </tr>
+        <tr>
+          <td class="phase-num">Milestone 1</td>
+          <td>
+            <div class="phase-name">Advisor Intake Form, Dynamic Field Types &amp; In-Memory Validation</div>
+            <div class="phase-desc">Polished data-entry form with Yes/No toggle pill groups, multi-choice radio cards with point weights, and prospect demographic inputs. Real-time required-field validation and instant one-click prospect reset lifecycle.</div>
+          </td>
+          <td style="text-align: center; font-weight: 600;">1 Day</td>
+          <td style="text-align: center; font-weight: 700; color: #0284c7;">25%</td>
+          <td style="text-align: right; font-weight: 700;">$75.00</td>
+        </tr>
+        <tr>
+          <td class="phase-num">Milestone 2</td>
+          <td>
+            <div class="phase-name">Decoupled Scoring Architecture, 5-Pillar Rules &amp; R/Y/G Indicators</div>
+            <div class="phase-desc">Pure calculation engine in <code>src/lib/scoring-engine.ts</code>. Category point aggregation, overall readiness score (0-100), automated Red (&lt;50%), Yellow (50-74%), and Green (&ge;75%) status badges, and dynamic priority actions.</div>
+          </td>
+          <td style="text-align: center; font-weight: 600;">1 Day</td>
+          <td style="text-align: center; font-weight: 700; color: #0284c7;">25%</td>
+          <td style="text-align: right; font-weight: 700;">$75.00</td>
+        </tr>
+        <tr>
+          <td class="phase-num">Milestone 3</td>
+          <td>
+            <div class="phase-name">Vector-Accurate 8.5×11 Portrait PDF Engine &amp; Print Consistency Lock</div>
+            <div class="phase-desc">CSS <code>@page {{ size: letter portrait; margin: 8mm 10mm; }}</code> with strict <code>@media print</code> element suppression. Guaranteed single-page print boundary eliminating 2-page spillovers across standard Windows PCs and browsers.</div>
+          </td>
+          <td style="text-align: center; font-weight: 600;">1 Day</td>
+          <td style="text-align: center; font-weight: 700; color: #0284c7;">25%</td>
+          <td style="text-align: right; font-weight: 700;">$75.00</td>
+        </tr>
+        <tr>
+          <td class="phase-num">Milestone 4</td>
+          <td>
+            <div class="phase-name">Standalone Offline HTML Export, Schema Inspector &amp; AI Copilot</div>
+            <div class="phase-desc">One-click bundled offline HTML export with inlined styles for locked-down corporate PCs; live Schema Inspector modal (<code>/api/export-schema</code>) for non-technical rule updates; optional dual-provider AI executive commentary.</div>
+          </td>
+          <td style="text-align: center; font-weight: 600;">0.5 Day</td>
+          <td style="text-align: center; font-weight: 700; color: #0284c7;">17%</td>
+          <td style="text-align: right; font-weight: 700;">$50.00</td>
+        </tr>
+        <tr>
+          <td class="phase-num">Milestone 5</td>
+          <td>
+            <div class="phase-name">Windows PC Cross-Browser Staging QA, Reset Lifecycle &amp; 100% Handover</div>
+            <div class="phase-desc">Cross-browser print testing on Windows 10/11 (Edge, Chrome, Firefox) across 100%, 125%, 150% display scaling; complete source code ownership transfer, step-by-step setup documentation, and 30-day bug-fix warranty.</div>
+          </td>
+          <td style="text-align: center; font-weight: 600;">0.5 Day</td>
+          <td style="text-align: center; font-weight: 700; color: #0284c7;">8%</td>
+          <td style="text-align: right; font-weight: 700;">$25.00</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="2" style="font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Total Turnkey Production Scope (All Requirements Covered)</td>
+          <td style="text-align: center; font-weight: 800;">3–4 Days</td>
+          <td style="text-align: center; font-weight: 800;">100%</td>
+          <td style="text-align: right; font-weight: 800; font-family: ui-monospace, monospace; font-size: 10px;">$300.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. 2-Column Technical & Financial Breakdown -->
+  <div class="grid-2col">
+    <div class="card-box">
+      <div class="card-box-title">Milestone Escrow &amp; Release Schedule</div>
+      <div class="milestone-item">
+        <span class="milestone-name">Phase 0: Interactive Architectural Prototype (Live)</span>
+        <span class="milestone-val" style="color: #16a34a;">$0.00 (Delivered)</span>
       </div>
-      <div class="meta-card">
-        <div class="meta-row"><span class="meta-label">Date:</span> <span class="meta-val">September 15, 2026</span></div>
-        <div class="meta-row"><span class="meta-label">Target Stack:</span> <span class="meta-val">Next.js 15 • React 19 • Tailwind v4</span></div>
-        <div class="meta-row"><span class="meta-label">Contract Type:</span> <span class="meta-val">Fixed-Price Milestone ($300.00)</span></div>
-        <div class="meta-row"><span class="meta-label">Live Systems Prototype:</span> <span class="meta-val" style="color: #0284c7;">retirement-scorecard-app.vercel.app</span></div>
+      <div class="milestone-item">
+        <span class="milestone-name">M1: Advisor Intake Form &amp; Validation Engine</span>
+        <span class="milestone-val">$75.00 (Net 1 Day)</span>
+      </div>
+      <div class="milestone-item">
+        <span class="milestone-name">M2: Decoupled Scoring Architecture &amp; R/Y/G Rules</span>
+        <span class="milestone-val">$75.00 (Net 2 Days)</span>
+      </div>
+      <div class="milestone-item">
+        <span class="milestone-name">M3: Vector-Accurate 8.5x11 PDF Print Engine</span>
+        <span class="milestone-val">$75.00 (Net 3 Days)</span>
+      </div>
+      <div class="milestone-item">
+        <span class="milestone-name">M4: Standalone HTML Export &amp; Schema Inspector</span>
+        <span class="milestone-val">$50.00 (Net 3.5 Days)</span>
+      </div>
+      <div class="milestone-item">
+        <span class="milestone-name">M5: Windows PC QA &amp; 100% Source Code Transfer</span>
+        <span class="milestone-val">$25.00 (Net 4 Days)</span>
       </div>
     </div>
 
-    <!-- 2. MILESTONE SCOPE TABLE -->
-    <div class="scope-block">
-      <div class="section-title">Execution Milestones &amp; Investment Schedule</div>
-      <table class="scope-table">
-        <thead>
-          <tr>
-            <th style="width: 14%;">Milestone</th>
-            <th style="width: 54%;">Technical Scope &amp; Architectural Deliverables</th>
-            <th style="width: 10%;">Timeline</th>
-            <th style="width: 10%;">Rate</th>
-            <th style="width: 12%;">Investment</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="ready-badge">Phase 0: Live</span></td>
-            <td><strong>Interactive Architecture Prototype &amp; Operational Cockpit:</strong> Deployed live demo with 5-pillar advisory questionnaire, live score computation engine, R/Y/G pills, 8.5x11 live preview, and zero-PII client-side state.</td>
-            <td>Completed</td>
-            <td>$0.00</td>
-            <td><strong>$0.00 (Ready Now)</strong></td>
-          </tr>
-          <tr>
-            <td><span class="phase-badge">Phase 1: Delivery</span></td>
-            <td><strong>Core Production Web App, Decoupled Rules &amp; Windows PDF Engine:</strong> Integration of firm branding, logo &amp; color tokens, decoupled JSON scoring schema (`scorecard-config.ts`), vector-accurate CSS `@page` Letter portrait print engine, required-field validation, reset functionality, and complete Git source code ownership transfer.</td>
-            <td>3–4 Days</td>
-            <td>$30.00/hr</td>
-            <td><strong>$300.00</strong></td>
-          </tr>
-          <tr>
-            <td><span class="phase-badge" style="background: #f1f5f9; color: #475569;">Phase 2: Post-Launch</span></td>
-            <td><strong>30-Day Hypercare Warranty &amp; Windows PC Print Quality Assurance:</strong> Cross-browser testing on Windows PCs (Edge, Chrome, Firefox), testing across 100%, 125%, 150% display scaling, and minor wording or scoring rule tweaks.</td>
-            <td>30 Days</td>
-            <td>Included</td>
-            <td><strong>$0.00 (Warranty)</strong></td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="2">TOTAL FIXED INVESTMENT (Phase 0 Live + Phase 1 Delivery + 30-Day Hypercare)</td>
-            <td>3–4 Days</td>
-            <td>Fixed</td>
-            <td>$300.00 USD</td>
-          </tr>
-        </tfoot>
-      </table>
+    <div class="card-box">
+      <div class="card-box-title">Architecture &amp; Print Consistency Guardrails</div>
+      <div class="guardrail-item"><strong>Single-Page 8.5x11 Guarantee:</strong> Vector CSS <code>@page</code> Letter portrait rules lock content to 248mm max height</div>
+      <div class="guardrail-item"><strong>Zero-PII Storage Policy:</strong> Pure client-side in-memory state; zero permanent database or cookie storage</div>
+      <div class="guardrail-item"><strong>Decoupled JSON Configuration:</strong> All questions, weights, and cutoffs isolated in <code>scorecard-config.ts</code></div>
+      <div class="guardrail-item"><strong>Dual Export Options:</strong> Browser vector PDF print (Ctrl+P) + 1-click standalone offline HTML file</div>
+      <div class="guardrail-item"><strong>Multi-Provider AI Fallback:</strong> OpenAI gpt-4o-mini + Gemini 2.0 Flash + deterministic CFP rule engine</div>
     </div>
+  </div>
 
-    <!-- 3. 2-COLUMN MODULAR SPECIFICATION GRID -->
-    <div class="grid-2col">
-      <div class="card-box">
-        <h3>Architecture &amp; Print Consistency Guardrails</h3>
-        <ul class="item-list">
-          <li><strong>Single-Page 8.5x11 Guarantee:</strong> Pure CSS `@page {{ size: letter portrait; margin: 8mm 10mm; }}` with automatic `@media print` element suppression, eliminating 2-page spillovers on Windows PCs.</li>
-          <li><strong>Standalone Offline HTML Export:</strong> 1-click bundled offline export allowing advisors to save and print scorecards on enterprise computers with restricted PDF print drivers.</li>
-          <li><strong>Zero-PII Storage Policy:</strong> In-memory React state lifecycle ensures zero prospect financial data is persisted to disks, databases, or cookies during initial discovery.</li>
-          <li><strong>Decoupled Scoring Engine:</strong> Category weights, question options, and R/Y/G cutoffs (Green &ge; 75%, Yellow &ge; 50%) isolated in clean JSON configuration files.</li>
-        </ul>
+  <!-- 4. Commercial Terms Section -->
+  <div class="terms-box">
+    <div class="terms-grid">
+      <div class="term-col">
+        <div class="term-title">Fixed-Price Guarantee</div>
+        <div class="term-body">100% milestone-based fixed investment ($300.00). Zero hidden fees, zero vendor markups, zero scope creep.</div>
       </div>
-
-      <div class="card-box">
-        <h3>Future Developer &amp; Operational Extensibility</h3>
-        <ul class="item-list">
-          <li><strong>Non-Technical Configurator:</strong> Intuitive Schema Inspector modal (`/api/export-schema`) enabling future staff to modify questions and scoring weights without code rewrites.</li>
-          <li><strong>Real AI Executive Synthesizer:</strong> Optional dual-provider narrative copilot (OpenAI `gpt-4o-mini` + Gemini `2.0-flash` with deterministic `CFP-RuleEngine-v1` offline lock).</li>
-          <li><strong>Turnkey Setup Documentation:</strong> Complete `README.md` with 1-step Vercel deployment button, local setup instructions (`npm run dev`), and Windows print checklist.</li>
-          <li><strong>100% Intellectual Property Transfer:</strong> Full source code, Git commit history, and asset ownership transferred with zero vendor lock-in.</li>
-        </ul>
+      <div class="term-col">
+        <div class="term-title">30-Day Bug Warranty</div>
+        <div class="term-body">Full post-deployment coverage for browser layout adjustments, scoring tweaks, and print QA at $0 extra.</div>
       </div>
-    </div>
-
-    <!-- 4. COMMERCIAL TERMS BOX (4-COLUMN) -->
-    <div class="terms-box">
-      <div class="terms-grid">
-        <div class="term-item">
-          <div class="term-title">Escrow Protection</div>
-          <div class="term-desc">100% funded via Upwork Escrow milestone; released solely upon final acceptance and Windows print verification.</div>
-        </div>
-        <div class="term-item">
-          <div class="term-title">Full IP Ownership</div>
-          <div class="term-desc">100% copyright, source code, and design assets transferred immediately upon delivery. No licensing or recurring fees.</div>
-        </div>
-        <div class="term-item">
-          <div class="term-title">30-Day Hypercare SLA</div>
-          <div class="term-desc">Dedicated bug-fixing warranty covering any edge-case browser or layout adjustments across advisor workstations.</div>
-        </div>
-        <div class="term-item">
-          <div class="term-title">Quote Validity</div>
-          <div class="term-desc">Terms and $300 fixed fee guaranteed for 30 days from issuance. Turnaround 3 to 4 business days upon start.</div>
-        </div>
+      <div class="term-col">
+        <div class="term-title">100% Code Ownership</div>
+        <div class="term-body">All source code, Git history, and assets transferred directly to your team with no recurring licensing fees.</div>
       </div>
-    </div>
-
-    <!-- 5. FORMAL ACCEPTANCE AUTHORIZATION -->
-    <div class="auth-block">
-      <div class="sig-grid">
-        <div class="sig-col">
-          <div class="sig-line">
-            <span class="sig-cursive">Shakil Ahmed</span>
-          </div>
-          <div class="sig-label">Authorized Provider Signature • Shakil Ahmed, Founder &amp; Principal Systems Architect</div>
-        </div>
-        <div class="sig-col">
-          <div class="sig-line">
-            <span class="sig-client-tag">[ Accepted via Upwork Contract Offer / Sign-off ]</span>
-          </div>
-          <div class="sig-label">Authorized Client Signature • Jim Martin (Client)</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6. EXECUTIVE SIGNATURE FOOTER -->
-    <div class="footer-container">
-      <div class="footer-left">
-        <img class="footer-avatar" src="{headshot_b64}" alt="Shakil Ahmed" />
-        <img class="footer-logo" src="{logo_b64}" alt="BarakahSoft" />
-        <div class="footer-meta">
-          <strong>BarakahSoft LLC</strong> • Enterprise Systems Engineering<br>
-          Shakil Ahmed • Verified Upwork Partner • 12+ Yrs Systems Architecture • Former Lead Engineer at Legiit ($1M ARR)
-        </div>
-      </div>
-      <div class="footer-right">
-        <span class="demo-tag">Live System Verified</span><br>
-        Demo Cockpit: <strong style="color: #0f2942;">retirement-scorecard-app.vercel.app</strong><br>
-        Christiansburg, VA Advisory Engagement • Ref #BS-2026-RET-031
+      <div class="term-col">
+        <div class="term-title">Handover &amp; Setup Docs</div>
+        <div class="term-body">Step-by-step documentation for running locally (<code>npm run dev</code>) or deploying in 1-click to Vercel.</div>
       </div>
     </div>
   </div>
 
+  <!-- 5. Formal Acceptance Authorization Block -->
+  <div class="auth-block">
+    <div class="auth-title">
+      <span>Formal Authorization &amp; Engagement Acceptance</span>
+      <span style="font-weight: 500; font-size: 7.4px; color: #475569;">Binding upon signature by authorized representatives</span>
+    </div>
+    <div class="auth-grid">
+      <div class="auth-party">
+        <div class="auth-party-title">Authorized Provider: BarakahSoft LLC (Wyoming, USA)</div>
+        <div>Signatory: <strong>Shakil Ahmed</strong> • Principal Systems Architect &amp; Founder</div>
+        <div class="auth-sign-line">
+          <div class="auth-sign-field">Shakil Ahmed</div>
+          <div class="auth-date-field">15 Sep 2026</div>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span class="auth-label">Authorized Provider Signature</span>
+          <span class="auth-label" style="width: 90px; text-align: center;">Date</span>
+        </div>
+      </div>
+
+      <div class="auth-party">
+        <div class="auth-party-title">Authorized Client: Jim Martin (Christiansburg, VA, USA)</div>
+        <div>Signatory: <strong>Jim Martin</strong> • Authorized Client Representative</div>
+        <div class="auth-sign-line">
+          <div class="auth-sign-field" style="color: #64748b; font-family: inherit; font-size: 8px; font-style: italic;">[ Accepted via Upwork Contract Offer / Sign-off ]</div>
+          <div class="auth-date-field">___ / ___ / 2026</div>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span class="auth-label">Authorized Client Signature</span>
+          <span class="auth-label" style="width: 90px; text-align: center;">Date</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Executive Signature Footer -->
+  <div class="footer-container">
+    <div class="footer-founder">
+      <img src="data:image/jpeg;base64,{headshot_b64}" alt="Shakil Ahmed" class="founder-avatar" />
+      <div class="founder-info">
+        <div class="founder-name"><strong>Shakil Ahmed</strong> • Founder &amp; Lead Systems Architect (12+ Yrs Exp)</div>
+        <div class="founder-company"><strong>BarakahSoft LLC</strong> • Enterprise Wealth &amp; AI Systems Partner</div>
+        <div class="founder-sub">Former Lead Engineer at Legiit ($1M ARR Command Center) • Verified Upwork Partner</div>
+      </div>
+    </div>
+    <div class="footer-brand">
+      <img src="data:image/png;base64,{logo_b64}" alt="BarakahSoft" class="business-logo" />
+      <a href="https://retirement-scorecard-app.vercel.app" target="_blank" class="demo-badge">retirement-scorecard-app.vercel.app</a>
+    </div>
+  </div>
+</div>
 </body>
 </html>
 """
 
-    html_path = os.path.join(docs_dir, "estimate.html")
-    pdf_path = os.path.join(docs_dir, "ESTIMATE.pdf")
-
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html_content)
-    print(f"Generated HTML estimate at: {html_path}")
+
+    print("Saved estimate.html to:", html_path)
 
     # Compile with Headless Chrome using absolute file URI
-    chrome_bin = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-    if not os.path.exists(chrome_bin):
-        print(f"Error: Chrome binary not found at {chrome_bin}", file=sys.stderr)
-        sys.exit(1)
-
     chrome_cmd = [
-        chrome_bin,
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
         "--headless",
         "--disable-gpu",
         "--no-pdf-header-footer",
@@ -534,33 +710,23 @@ def build_html():
         f"file://{os.path.abspath(html_path)}"
     ]
 
-    print("Compiling PDF with Headless Chrome...")
     res = subprocess.run(chrome_cmd, capture_output=True, text=True)
-    if res.returncode != 0:
-        print(f"Chrome PDF generation error: {res.stderr}", file=sys.stderr)
+    if res.returncode == 0:
+        print("Successfully generated ESTIMATE.pdf via Chrome Headless at:", pdf_path)
+        print("File size:", os.path.getsize(pdf_path), "bytes")
+    else:
+        print("Chrome print-to-pdf error:", res.stderr, file=sys.stderr)
         sys.exit(1)
 
-    # Audits
-    if not os.path.exists(pdf_path):
-        print("Error: PDF was not created!", file=sys.stderr)
-        sys.exit(1)
-
-    file_size_kb = os.path.getsize(pdf_path) / 1024
-    print(f"PDF generated successfully: {pdf_path} ({file_size_kb:.1f} KB)")
-
+    # Verify page count
     with open(pdf_path, "rb") as f:
         pdf_bytes = f.read()
 
-    pages = len(re.findall(rb"/Type\s*/Page[^s]", pdf_bytes))
-    print(f"Page Count Audit: {pages} page(s)")
-    if pages != 1:
-        print(f"CRITICAL ERROR: PDF has {pages} pages! Expected exactly 1 page.", file=sys.stderr)
+    pages = re.findall(rb"/Type\s*/Page[^s]", pdf_bytes)
+    print(f"Verified PDF page count: {len(pages)} page(s)")
+    if len(pages) != 1:
+        print(f"CRITICAL ERROR: Expected exactly 1 page, got {len(pages)}!", file=sys.stderr)
         sys.exit(1)
 
-    if file_size_kb < 300:
-        print(f"WARNING: PDF size is suspiciously low ({file_size_kb:.1f} KB). Check for missing assets.", file=sys.stderr)
-
-    print("ESTIMATE.pdf generated and audited successfully!")
-
 if __name__ == "__main__":
-    build_html()
+    build_estimate()
