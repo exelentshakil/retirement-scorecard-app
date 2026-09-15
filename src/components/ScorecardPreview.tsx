@@ -394,7 +394,7 @@ export function ScorecardPreview({
           </div>
 
           {/* 6. Professional Sign-off & Compliance Disclosures */}
-          <div className="border-t border-slate-300 pt-2 mt-auto text-[9px] text-slate-500 compliance-section">
+          <div className="border-t border-slate-300 pt-2 mt-0 text-[9px] text-slate-500 compliance-section">
             <div className="flex items-center justify-between gap-2 mb-1 font-mono">
               <div>
                 Prepared by: <strong className="text-slate-800">{profile.advisorName || "Lead Advisor, CFP®"}</strong> • {profile.advisoryFirm}
@@ -403,7 +403,7 @@ export function ScorecardPreview({
                 Tel: {profile.firmPhone || "(540) 555-0194"} • Email: {profile.firmEmail || "advisory@meridianwealth.com"}
               </div>
             </div>
-            <p className="leading-tight text-slate-400 compliance-text">
+            <p className="leading-tight text-slate-500 dark:text-slate-400 compliance-text">
               IMPORTANT COMPLIANCE DISCLOSURE: This Retirement Readiness Scorecard is provided for informational and educational purposes only and does not constitute formal legal, tax, or investment advice. Projections are based on client-provided inputs, actuarial estimates, and standardized assumptions. Past performance does not guarantee future results. Securities and advisory services offered through Meridian &amp; Blue Ridge Wealth LLC, an SEC-registered investment adviser.
             </p>
           </div>

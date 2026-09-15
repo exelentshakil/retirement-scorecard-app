@@ -315,13 +315,14 @@ export default function HomePage() {
         line-height: 1.25 !important;
       }
       #scorecard-printable .compliance-section {
-        margin-top: auto !important;
+        margin-top: 0 !important;
         padding-top: 8px !important;
         border-top: 1px solid #cbd5e1 !important;
       }
       #scorecard-printable .compliance-text {
         font-size: 8px !important;
         line-height: 1.25 !important;
+        color: #475569 !important;
       }
     }
   </style>
