@@ -164,7 +164,7 @@ code, kbd, pre, .font-mono {
 @media print {
   @page {
     size: letter portrait;
-    margin: 6mm 8mm 6mm 8mm;
+    margin: 5mm 6mm 5mm 6mm;
   }
   
   *, *:before, *:after {
@@ -179,9 +179,9 @@ code, kbd, pre, .font-mono {
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
-    height: auto !important;
-    min-height: 100% !important;
-    overflow: visible !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
   }
 
   .no-print, nav, header, footer, .reviewer-tour, .bento-kpi, .form-column, .modal-backdrop {
@@ -234,19 +234,22 @@ code, kbd, pre, .font-mono {
     height: auto !important;
   }
 
-  /* The printable scorecard in print: keeps 100% exact visual parity with preview */
+  /* The printable scorecard in print: guaranteed single-page 8.5 x 11 letter geometry */
   #scorecard-printable {
     box-shadow: none !important;
     border: none !important;
     max-width: 100% !important;
     width: 100% !important;
+    max-height: 980px !important;
     height: auto !important;
     margin: 0 auto !important;
-    padding: 16px 20px !important;
+    padding: 10px 16px !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     page-break-after: avoid !important;
     break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-before: avoid !important;
     background: #ffffff !important;
   }
 
@@ -255,22 +258,58 @@ code, kbd, pre, .font-mono {
     display: grid !important;
   }
 
-  /* Precision print spacing to guarantee 100% single letter portrait page */
+  /* Precision vertical calibration to prevent 2nd page spillover */
   #scorecard-printable .mb-3 {
-    margin-bottom: 7px !important;
+    margin-bottom: 4px !important;
   }
   #scorecard-printable .pb-3 {
-    padding-bottom: 6px !important;
+    padding-bottom: 4px !important;
   }
   #scorecard-printable .p-3 {
-    padding: 6px 10px !important;
+    padding: 4px 8px !important;
+  }
+  #scorecard-printable .p-2\.5 {
+    padding: 3px 6px !important;
   }
   #scorecard-printable .p-2 {
-    padding: 6px 8px !important;
+    padding: 3px 6px !important;
   }
+  #scorecard-printable .p-1\.5 {
+    padding: 2px 4px !important;
+  }
+
+  /* Pillar table print compacting */
   #scorecard-printable table th,
   #scorecard-printable table td {
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
+    padding-top: 1.5px !important;
+    padding-bottom: 1.5px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+  #scorecard-printable table td p {
+    line-height: 1.15 !important;
+  }
+
+  /* Advisor commentary print styling */
+  #scorecard-printable .advisor-commentary-text {
+    line-height: 1.2 !important;
+  }
+  #scorecard-printable .advisor-commentary-text p {
+    margin-bottom: 2px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Priority action plan card compacting */
+  #scorecard-printable .action-plan-card p {
+    line-height: 1.15 !important;
+  }
+
+  /* Compliance text */
+  #scorecard-printable .compliance-text {
+    font-size: 7.5px !important;
+    line-height: 1.1 !important;
+  }
+  #scorecard-printable .compliance-section {
+    padding-top: 4px !important;
   }
 }

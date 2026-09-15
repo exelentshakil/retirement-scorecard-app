@@ -219,7 +219,7 @@ export default function HomePage() {
     @media print {
       @page {
         size: letter portrait;
-        margin: 6mm 8mm 6mm 8mm;
+        margin: 5mm 6mm 5mm 6mm;
       }
       *, *:before, *:after {
         -webkit-print-color-adjust: exact !important;
@@ -228,8 +228,13 @@ export default function HomePage() {
       }
       html, body {
         background: #ffffff !important;
+        color: #0f172a !important;
         padding: 0 !important;
         margin: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
       }
       .standalone-viewport {
         padding: 0 !important;
@@ -244,32 +249,65 @@ export default function HomePage() {
         border: none !important;
         width: 100% !important;
         max-width: 100% !important;
-        padding: 16px 20px !important;
+        max-height: 980px !important;
+        height: auto !important;
+        margin: 0 auto !important;
+        padding: 10px 16px !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
         page-break-after: avoid !important;
         break-after: avoid !important;
+        page-break-before: avoid !important;
+        break-before: avoid !important;
         background: #ffffff !important;
       }
       #scorecard-printable .grid {
         display: grid !important;
       }
       #scorecard-printable .mb-3 {
-        margin-bottom: 7px !important;
+        margin-bottom: 4px !important;
       }
       #scorecard-printable .pb-3 {
-        padding-bottom: 6px !important;
+        padding-bottom: 4px !important;
       }
       #scorecard-printable .p-3 {
-        padding: 6px 10px !important;
+        padding: 4px 8px !important;
+      }
+      #scorecard-printable .p-2\.5 {
+        padding: 3px 6px !important;
       }
       #scorecard-printable .p-2 {
-        padding: 6px 8px !important;
+        padding: 3px 6px !important;
+      }
+      #scorecard-printable .p-1\.5 {
+        padding: 2px 4px !important;
       }
       #scorecard-printable table th,
       #scorecard-printable table td {
-        padding-top: 3px !important;
-        padding-bottom: 3px !important;
+        padding-top: 1.5px !important;
+        padding-bottom: 1.5px !important;
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+      }
+      #scorecard-printable table td p {
+        line-height: 1.15 !important;
+      }
+      #scorecard-printable .advisor-commentary-text {
+        line-height: 1.2 !important;
+      }
+      #scorecard-printable .advisor-commentary-text p {
+        margin-bottom: 2px !important;
+        line-height: 1.2 !important;
+      }
+      #scorecard-printable .action-plan-card p {
+        line-height: 1.15 !important;
+      }
+      #scorecard-printable .compliance-text {
+        font-size: 7.5px !important;
+        line-height: 1.1 !important;
+      }
+      #scorecard-printable .compliance-section {
+        padding-top: 4px !important;
       }
     }
   </style>

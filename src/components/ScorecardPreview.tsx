@@ -181,36 +181,36 @@ export function ScorecardPreview({
             </div>
 
             {/* Client & Advisor Metadata Bar */}
-            <div className="grid grid-cols-4 gap-2 mt-2.5 pt-2.5 border-t border-slate-200 text-xs">
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="grid grid-cols-12 gap-2 mt-2 pt-2 border-t border-slate-200 text-xs items-center">
+              <div className="col-span-3 min-w-0">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block leading-none mb-0.5">
                   Primary Client
                 </span>
-                <span className="font-bold text-slate-900 truncate block">
+                <span className="font-bold text-slate-900 truncate block whitespace-nowrap">
                   {profile.clientName || "Client Name"}
                 </span>
               </div>
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              <div className="col-span-4 min-w-0">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block leading-none mb-0.5 whitespace-nowrap">
                   Age / Target Retirement
                 </span>
-                <span className="font-bold text-slate-900 block font-mono">
-                  Age {profile.currentAge} ➔ Retire at {profile.targetRetirementAge} ({yearsToRetire} yrs)
+                <span className="font-bold text-slate-900 block font-mono whitespace-nowrap text-[11px] sm:text-xs">
+                  Age {profile.currentAge} ➔ Retire {profile.targetRetirementAge} ({yearsToRetire} yrs)
                 </span>
               </div>
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              <div className="col-span-2 min-w-0">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block leading-none mb-0.5 whitespace-nowrap">
                   Invested Assets
                 </span>
-                <span className="font-bold text-slate-900 block font-mono">
+                <span className="font-bold text-slate-900 block font-mono whitespace-nowrap">
                   ${(profile.currentRetirementSavings || 0).toLocaleString()}
                 </span>
               </div>
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              <div className="col-span-3 min-w-0">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block leading-none mb-0.5 whitespace-nowrap">
                   Lead Advisor
                 </span>
-                <span className="font-bold text-slate-900 truncate block">
+                <span className="font-bold text-slate-900 truncate block whitespace-nowrap">
                   {profile.advisorName || "Lead Advisor, CFP®"}
                 </span>
               </div>
@@ -344,7 +344,7 @@ export function ScorecardPreview({
           </div>
 
           {/* 4. Advisor Strategic Narrative & AI Copilot Section */}
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 mb-3">
+          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 mb-3 advisor-commentary-box">
             <div className="flex items-center justify-between gap-2 mb-1">
               <div className="flex items-center gap-1.5">
                 <FileText className="h-3.5 w-3.5 text-[#0f2942]" />
@@ -359,7 +359,7 @@ export function ScorecardPreview({
               )}
             </div>
 
-            <div className="text-[11px] text-slate-700 leading-snug space-y-1">
+            <div className="text-[11px] text-slate-700 leading-snug space-y-1 advisor-commentary-text">
               {aiNarrative ? (
                 aiNarrative.narrative.split("\n\n").map((para, i) => (
                   <p key={i}>{para}</p>
@@ -395,7 +395,7 @@ export function ScorecardPreview({
           </div>
 
           {/* 6. Professional Sign-off & Compliance Disclosures */}
-          <div className="border-t border-slate-300 pt-2.5 mt-auto text-[9px] text-slate-500">
+          <div className="border-t border-slate-300 pt-2 mt-auto text-[9px] text-slate-500 compliance-section">
             <div className="flex items-center justify-between gap-2 mb-1 font-mono">
               <div>
                 Prepared by: <strong className="text-slate-800">{profile.advisorName || "Lead Advisor, CFP®"}</strong> • {profile.advisoryFirm}
@@ -404,7 +404,7 @@ export function ScorecardPreview({
                 Tel: {profile.firmPhone || "(540) 555-0194"} • Email: {profile.firmEmail || "advisory@meridianwealth.com"}
               </div>
             </div>
-            <p className="leading-tight text-slate-400">
+            <p className="leading-tight text-slate-400 compliance-text">
               IMPORTANT COMPLIANCE DISCLOSURE: This Retirement Readiness Scorecard is provided for informational and educational purposes only and does not constitute formal legal, tax, or investment advice. Projections are based on client-provided inputs, actuarial estimates, and standardized assumptions. Past performance does not guarantee future results. Securities and advisory services offered through Meridian &amp; Blue Ridge Wealth LLC, an SEC-registered investment adviser.
             </p>
           </div>
