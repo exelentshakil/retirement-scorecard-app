@@ -167,23 +167,103 @@ export default function HomePage() {
   const handleDownloadHtml = () => {
     const element = document.getElementById("scorecard-printable");
     if (!element) return;
+
+    let allCss = "";
+    try {
+      for (const sheet of Array.from(document.styleSheets)) {
+        try {
+          for (const rule of Array.from(sheet.cssRules)) {
+            allCss += rule.cssText + "\n";
+          }
+        } catch {
+          // ignore cross-origin sheet access errors if any
+        }
+      }
+    } catch (e) {
+      console.warn("Could not extract stylesheets:", e);
+    }
+
     const content = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Retirement Scorecard - ${profile.clientName || "Client"}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    @page { size: letter portrait; margin: 8mm 10mm 8mm 10mm; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; margin: 0; padding: 20px; font-size: 10pt; }
-    ${document.querySelector("style")?.innerHTML || ""}
+    ${allCss}
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+    }
+    .standalone-viewport {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 32px 16px;
+    }
+    .standalone-container {
+      width: 100%;
+      max-width: 8.5in;
+    }
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 8mm 8mm 8mm 8mm;
+      }
+      *, *:before, *:after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      html, body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .standalone-viewport {
+        padding: 0 !important;
+        display: block !important;
+      }
+      .standalone-container {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+      #scorecard-printable {
+        box-shadow: none !important;
+        border: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+      #scorecard-printable .grid {
+        display: grid !important;
+      }
+    }
   </style>
 </head>
 <body>
-  ${element.outerHTML}
+  <div class="standalone-viewport">
+    <div class="standalone-container">
+      ${element.outerHTML}
+    </div>
+  </div>
 </body>
 </html>`;
 
-    const blob = new Blob([content], { type: "text/html" });
+    const blob = new Blob([content], { type: "text/html;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;

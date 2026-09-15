@@ -103,7 +103,7 @@ code, kbd, pre, .font-mono {
 @media print {
   @page {
     size: letter portrait;
-    margin: 6mm 8mm 6mm 8mm;
+    margin: 8mm 8mm 8mm 8mm;
   }
   
   *, *:before, *:after {
@@ -118,8 +118,9 @@ code, kbd, pre, .font-mono {
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
-    height: 100% !important;
-    overflow: hidden !important;
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
   }
 
   .no-print, nav, header, footer, .reviewer-tour, .bento-kpi, .form-column, .modal-backdrop {
@@ -139,12 +140,14 @@ code, kbd, pre, .font-mono {
     margin: 0 !important;
   }
 
-  .grid {
+  /* Unravel the two-column page grid in print */
+  main .grid.lg\:grid-cols-12 {
     display: block !important;
   }
 
-  .lg\:col-span-7 {
+  main .lg\:col-span-7 {
     width: 100% !important;
+    max-width: 100% !important;
     height: auto !important;
     display: block !important;
     overflow: visible !important;
@@ -157,6 +160,8 @@ code, kbd, pre, .font-mono {
     background: transparent !important;
     overflow: visible !important;
     border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   .preview-viewport-container {
@@ -168,61 +173,23 @@ code, kbd, pre, .font-mono {
     height: auto !important;
   }
 
+  /* The printable scorecard in print: keeps 100% exact visual parity with preview */
   #scorecard-printable {
     box-shadow: none !important;
     border: none !important;
     max-width: 100% !important;
     width: 100% !important;
-    height: 100% !important;
-    max-height: 265mm !important;
+    height: auto !important;
     margin: 0 auto !important;
-    padding: 8px 16px !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     page-break-after: avoid !important;
     break-after: avoid !important;
     background: #ffffff !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    font-size: 8pt !important;
-    zoom: 0.92;
   }
 
-  /* Compact print spacing to guarantee single page */
-  #scorecard-printable .mb-4 {
-    margin-bottom: 6px !important;
-  }
-  #scorecard-printable .pb-4 {
-    padding-bottom: 6px !important;
-  }
-  #scorecard-printable .p-3\.5 {
-    padding: 5px 8px !important;
-  }
-  #scorecard-printable .p-3 {
-    padding: 4px 6px !important;
-  }
-  #scorecard-printable .p-2\.5 {
-    padding: 3px 6px !important;
-  }
-  #scorecard-printable table th,
-  #scorecard-printable table td {
-    padding: 2.5px 5px !important;
-  }
-  #scorecard-printable .text-xs {
-    font-size: 7.5pt !important;
-    line-height: 1.15 !important;
-  }
-  #scorecard-printable .text-\[11px\] {
-    font-size: 7pt !important;
-    line-height: 1.15 !important;
-  }
-  #scorecard-printable .text-\[10px\] {
-    font-size: 6.5pt !important;
-    line-height: 1.1 !important;
-  }
-  #scorecard-printable .text-\[9px\] {
-    font-size: 6pt !important;
-    line-height: 1.05 !important;
+  /* Guarantee internal grids remain grids during printing */
+  #scorecard-printable .grid {
+    display: grid !important;
   }
 }

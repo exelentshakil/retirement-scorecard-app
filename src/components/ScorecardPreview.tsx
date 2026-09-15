@@ -152,10 +152,10 @@ export function ScorecardPreview({
             minHeight: "fit-content",
             height: "fit-content",
           }}
-          className="bg-white text-slate-900 rounded-lg shadow-xl border border-slate-200 p-6 sm:p-8 flex flex-col justify-between transition-all duration-200 font-sans shrink-0"
+          className="bg-white text-slate-900 rounded-lg shadow-xl border border-slate-200 p-6 flex flex-col justify-between transition-all duration-200 font-sans shrink-0"
         >
           {/* 1. Header & Institutional Branding */}
-          <div className="border-b-2 border-slate-900 pb-4 mb-4">
+          <div className="border-b-2 border-slate-900 pb-3 mb-3">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0 flex-1">
                 <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg bg-[#0f2942] text-white font-serif font-bold text-lg sm:text-xl shadow-xs">
@@ -181,7 +181,7 @@ export function ScorecardPreview({
             </div>
 
             {/* Client & Advisor Metadata Bar */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 pt-3 border-t border-slate-200 text-xs">
+            <div className="grid grid-cols-4 gap-2 mt-2.5 pt-2.5 border-t border-slate-200 text-xs">
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                   Primary Client
@@ -218,9 +218,9 @@ export function ScorecardPreview({
           </div>
 
           {/* 2. Executive Readiness Overview (Gauge & Actuarial Summary) */}
-          <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 mb-4 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <div className="grid grid-cols-12 gap-3.5 mb-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
             {/* Left Gauge Box */}
-            <div className="sm:col-span-4 flex flex-col items-center justify-center p-3 rounded-lg bg-white border border-slate-200 shadow-xs text-center">
+            <div className="col-span-4 flex flex-col items-center justify-center p-2.5 rounded-lg bg-white border border-slate-200 shadow-xs text-center">
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">
                 Retirement Readiness Score
               </span>
@@ -239,7 +239,7 @@ export function ScorecardPreview({
             </div>
 
             {/* Right Diagnostic Summary */}
-            <div className="sm:col-span-8 flex flex-col justify-between">
+            <div className="col-span-8 flex flex-col justify-between">
               <div>
                 <h3 className="text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-tight flex items-center gap-1.5 mb-1">
                   <Shield className="h-4 w-4 text-[#0f2942]" />
@@ -251,7 +251,7 @@ export function ScorecardPreview({
               </div>
 
               {/* Financial Runway Snapshot */}
-              <div className="grid grid-cols-3 gap-2 pt-2 mt-2 border-t border-slate-200 text-center text-xs">
+              <div className="grid grid-cols-3 gap-2 pt-1.5 mt-1.5 border-t border-slate-200 text-center text-xs">
                 <div className="p-1.5 rounded bg-white border border-slate-200">
                   <span className="text-[9px] text-slate-400 uppercase font-bold block">Target Monthly</span>
                   <span className="font-mono font-bold text-slate-900">
@@ -275,8 +275,8 @@ export function ScorecardPreview({
           </div>
 
           {/* 3. The 5 Core Pillars Breakdown Table */}
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
+          <div className="mb-3">
+            <div className="flex items-center justify-between mb-1.5">
               <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-800">
                 Core Planning Pillar Diagnostics
               </h3>
@@ -289,10 +289,10 @@ export function ScorecardPreview({
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="bg-slate-100 text-slate-600 border-b border-slate-200 text-[10px] font-bold uppercase tracking-wider">
-                    <th className="py-2 px-3 w-[26%]">Pillar Category</th>
-                    <th className="py-2 px-2 w-[14%] text-center">Score</th>
-                    <th className="py-2 px-2 w-[16%] text-center">Status</th>
-                    <th className="py-2 px-3 w-[44%]">Diagnostic Takeaway & Recommended Action</th>
+                    <th className="py-1.5 px-2.5 w-[26%]">Pillar Category</th>
+                    <th className="py-1.5 px-2 w-[14%] text-center">Score</th>
+                    <th className="py-1.5 px-2 w-[16%] text-center">Status</th>
+                    <th className="py-1.5 px-2.5 w-[44%]">Diagnostic Takeaway & Recommended Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
@@ -300,7 +300,7 @@ export function ScorecardPreview({
                     const badge = getStatusBadge(cat.status);
                     return (
                       <tr key={cat.categoryId} className="hover:bg-slate-50/60 transition-colors">
-                        <td className="py-2 px-3 align-top">
+                        <td className="py-1.5 px-2.5 align-top">
                           <span className="font-bold text-slate-900 block leading-tight">
                             {cat.shortTitle}
                           </span>
@@ -308,7 +308,7 @@ export function ScorecardPreview({
                             Weight: 20%
                           </span>
                         </td>
-                        <td className="py-2 px-2 align-top text-center font-mono">
+                        <td className="py-1.5 px-2 align-top text-center font-mono">
                           <div className="font-bold text-slate-900">
                             {cat.percentageScore}%
                           </div>
@@ -319,7 +319,7 @@ export function ScorecardPreview({
                             />
                           </div>
                         </td>
-                        <td className="py-2 px-2 align-top text-center">
+                        <td className="py-1.5 px-2 align-top text-center">
                           <span
                             className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border whitespace-nowrap ${badge.bg}`}
                           >
@@ -327,7 +327,7 @@ export function ScorecardPreview({
                             <span>{badge.label}</span>
                           </span>
                         </td>
-                        <td className="py-2 px-3 align-top">
+                        <td className="py-1.5 px-2.5 align-top">
                           <p className="text-[11px] font-medium text-slate-800 leading-snug">
                             {cat.keyFinding}
                           </p>
@@ -344,8 +344,8 @@ export function ScorecardPreview({
           </div>
 
           {/* 4. Advisor Strategic Narrative & AI Copilot Section */}
-          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 mb-4">
-            <div className="flex items-center justify-between gap-2 mb-1.5">
+          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 mb-3">
+            <div className="flex items-center justify-between gap-2 mb-1">
               <div className="flex items-center gap-1.5">
                 <FileText className="h-3.5 w-3.5 text-[#0f2942]" />
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">
@@ -359,7 +359,7 @@ export function ScorecardPreview({
               )}
             </div>
 
-            <div className="text-[11px] text-slate-700 leading-relaxed space-y-1.5">
+            <div className="text-[11px] text-slate-700 leading-snug space-y-1">
               {aiNarrative ? (
                 aiNarrative.narrative.split("\n\n").map((para, i) => (
                   <p key={i}>{para}</p>
@@ -373,15 +373,15 @@ export function ScorecardPreview({
           </div>
 
           {/* 5. Priority Action Plan & Next Steps */}
-          <div className="mb-4">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 mb-2">
+          <div className="mb-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 mb-1.5">
               Prioritized Strategic Action Plan
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            <div className="grid grid-cols-3 gap-2 text-xs">
               {scorecard.priorityActions.map((action, idx) => (
                 <div
                   key={idx}
-                  className="p-2.5 rounded-lg bg-white border border-slate-200 shadow-xs flex items-start gap-2"
+                  className="p-2 rounded-lg bg-white border border-slate-200 shadow-xs flex items-start gap-2"
                 >
                   <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#0f2942] text-white text-[10px] font-bold font-mono">
                     {idx + 1}
@@ -395,8 +395,8 @@ export function ScorecardPreview({
           </div>
 
           {/* 6. Professional Sign-off & Compliance Disclosures */}
-          <div className="border-t border-slate-300 pt-3 mt-auto text-[9px] text-slate-500">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2 font-mono">
+          <div className="border-t border-slate-300 pt-2.5 mt-auto text-[9px] text-slate-500">
+            <div className="flex items-center justify-between gap-2 mb-1 font-mono">
               <div>
                 Prepared by: <strong className="text-slate-800">{profile.advisorName || "Lead Advisor, CFP®"}</strong> • {profile.advisoryFirm}
               </div>
