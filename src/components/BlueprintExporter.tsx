@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Download, ShieldCheck, Check, FileCode, Monitor, BookOpen, Terminal } from "lucide-react";
+import { X, Download, ShieldCheck, Check, FileCode, Monitor, Terminal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface BlueprintExporterProps {
   isOpen: boolean;
@@ -124,7 +126,7 @@ export function BlueprintExporter({ isOpen, onClose }: BlueprintExporterProps) {
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-bold text-[var(--color-text-primary)]">
-                Turnkey Blueprints & Complete Code Ownership
+                Turnkey Blueprints &amp; Complete Code Ownership
               </h3>
               <p className="text-xs text-[var(--color-text-muted)]">
                 Guaranteed 100% intellectual property transfer, standalone offline portability, and Windows test checklist.
@@ -132,12 +134,14 @@ export function BlueprintExporter({ isOpen, onClose }: BlueprintExporterProps) {
             </div>
           </div>
 
-          <button
+          <Button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+            variant="ghost"
+            size="icon-sm"
+            className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
           >
-            <X className="h-5 w-5" />
-          </button>
+            <X className="h-4 w-4" />
+          </Button>
         </div>
 
         {/* Content */}
@@ -147,7 +151,7 @@ export function BlueprintExporter({ isOpen, onClose }: BlueprintExporterProps) {
             <div className="flex items-center gap-2">
               <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               <h4 className="text-xs sm:text-sm font-bold text-emerald-950 dark:text-emerald-200">
-                100% Client Source Code Ownership & Copyright Transfer
+                100% Client Source Code Ownership &amp; Copyright Transfer
               </h4>
             </div>
             <p className="text-xs text-emerald-900/80 dark:text-emerald-300/80 leading-relaxed">
@@ -169,13 +173,15 @@ export function BlueprintExporter({ isOpen, onClose }: BlueprintExporterProps) {
                   Runs directly inside any browser on any Windows PC or laptop without installing Node.js, Python, or local servers.
                 </p>
               </div>
-              <button
+              <Button
                 onClick={handleDownloadOfflineHtml}
-                className="w-full inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-semibold bg-[var(--color-brand)] text-white hover:bg-slate-800 transition-colors"
+                variant="brand"
+                size="sm"
+                className="w-full text-xs font-semibold gap-1.5"
               >
                 <Download className="h-3.5 w-3.5" />
                 <span>{downloaded === "html" ? "Downloaded!" : "Download Standalone HTML"}</span>
-              </button>
+              </Button>
             </div>
 
             <div className="p-3.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-panel-subtle)] flex flex-col justify-between">
@@ -201,7 +207,7 @@ export function BlueprintExporter({ isOpen, onClose }: BlueprintExporterProps) {
           <div className="p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] space-y-2">
             <h5 className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)] flex items-center gap-1.5">
               <Terminal className="h-3.5 w-3.5" />
-              <span>Standard 3-Step Setup & Deployment</span>
+              <span>Standard 3-Step Setup &amp; Deployment</span>
             </h5>
             <ol className="text-xs text-[var(--color-text-secondary)] space-y-1.5 list-decimal pl-4">
               <li>
@@ -220,12 +226,14 @@ export function BlueprintExporter({ isOpen, onClose }: BlueprintExporterProps) {
         {/* Footer */}
         <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-panel-subtle)] flex items-center justify-between text-xs text-[var(--color-text-muted)]">
           <span>Warranty &amp; Bug-Fix SLA: 14-day dedicated correction period included</span>
-          <button
+          <Button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] font-semibold hover:bg-[var(--color-surface-hover)]"
+            variant="outline"
+            size="sm"
+            className="text-xs font-semibold"
           >
             Close
-          </button>
+          </Button>
         </div>
       </div>
     </div>

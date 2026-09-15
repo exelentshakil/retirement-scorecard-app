@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Calculator, TrendingUp, Clock, DollarSign, CheckCircle2 } from "lucide-react";
+import { X, Calculator, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 
 interface RoiCostCalculatorProps {
   isOpen: boolean;
@@ -42,12 +44,14 @@ export function RoiCostCalculator({ isOpen, onClose }: RoiCostCalculatorProps) {
             </div>
           </div>
 
-          <button
+          <Button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+            variant="ghost"
+            size="icon-sm"
+            className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
           >
-            <X className="h-5 w-5" />
-          </button>
+            <X className="h-4 w-4" />
+          </Button>
         </div>
 
         {/* Sliders & Calculation Body */}
@@ -94,53 +98,49 @@ export function RoiCostCalculator({ isOpen, onClose }: RoiCostCalculatorProps) {
           </div>
 
           {/* Interactive Controls */}
-          <div className="space-y-4 p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-panel-subtle)]">
+          <div className="space-y-5 p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-panel-subtle)]">
             {/* Slider 1: Number of Advisors */}
-            <div>
-              <div className="flex justify-between text-xs font-semibold text-[var(--color-text-primary)] mb-1.5">
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs font-semibold text-[var(--color-text-primary)]">
                 <span>Number of Advisors / Intake Staff:</span>
-                <span className="font-mono text-[var(--color-brand-accent)]">{advisorCount} advisors</span>
+                <span className="font-mono text-[var(--color-brand-accent)] font-bold">{advisorCount} advisors</span>
               </div>
-              <input
-                type="range"
-                min="1"
-                max="20"
-                value={advisorCount}
-                onChange={(e) => setAdvisorCount(parseInt(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              <Slider
+                min={1}
+                max={20}
+                step={1}
+                value={[advisorCount]}
+                onValueChange={(val) => setAdvisorCount(val[0])}
               />
             </div>
 
             {/* Slider 2: Prospects Per Month per Advisor */}
-            <div>
-              <div className="flex justify-between text-xs font-semibold text-[var(--color-text-primary)] mb-1.5">
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs font-semibold text-[var(--color-text-primary)]">
                 <span>Prospect Scorecards per Advisor / Month:</span>
-                <span className="font-mono text-[var(--color-brand-accent)]">{prospectsPerMonth} reviews</span>
+                <span className="font-mono text-[var(--color-brand-accent)] font-bold">{prospectsPerMonth} reviews</span>
               </div>
-              <input
-                type="range"
-                min="3"
-                max="50"
-                value={prospectsPerMonth}
-                onChange={(e) => setProspectsPerMonth(parseInt(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              <Slider
+                min={3}
+                max={50}
+                step={1}
+                value={[prospectsPerMonth]}
+                onValueChange={(val) => setProspectsPerMonth(val[0])}
               />
             </div>
 
             {/* Slider 3: Advisor Billable / Value Rate */}
-            <div>
-              <div className="flex justify-between text-xs font-semibold text-[var(--color-text-primary)] mb-1.5">
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs font-semibold text-[var(--color-text-primary)]">
                 <span>Effective Advisor Billable Rate ($/hr):</span>
-                <span className="font-mono text-[var(--color-brand-accent)]">${advisorHourlyValue}/hr</span>
+                <span className="font-mono text-[var(--color-brand-accent)] font-bold">${advisorHourlyValue}/hr</span>
               </div>
-              <input
-                type="range"
-                min="100"
-                max="500"
-                step="25"
-                value={advisorHourlyValue}
-                onChange={(e) => setAdvisorHourlyValue(parseInt(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              <Slider
+                min={100}
+                max={500}
+                step={25}
+                value={[advisorHourlyValue]}
+                onValueChange={(val) => setAdvisorHourlyValue(val[0])}
               />
             </div>
           </div>
@@ -148,7 +148,7 @@ export function RoiCostCalculator({ isOpen, onClose }: RoiCostCalculatorProps) {
           <div className="p-3 rounded-lg bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-900 dark:text-emerald-200 flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
             <span>
-              <strong>Payback Period:</strong> At {totalProspectsPerMonth} monthly prospect reviews, a $300 custom web application achieves 100% financial breakeven in less than <strong>3 business days</strong>.
+              <strong>Payback Period:</strong> At {totalProspectsPerMonth} monthly prospect reviews, a custom web application achieves 100% financial breakeven in less than <strong>3 business days</strong>.
             </span>
           </div>
         </div>
@@ -156,12 +156,14 @@ export function RoiCostCalculator({ isOpen, onClose }: RoiCostCalculatorProps) {
         {/* Footer */}
         <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-panel-subtle)] flex items-center justify-between text-xs text-[var(--color-text-muted)]">
           <span>Based on average 45-min manual vs. 3-min automated intake</span>
-          <button
+          <Button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] font-semibold hover:bg-[var(--color-surface-hover)]"
+            variant="outline"
+            size="sm"
+            className="text-xs font-semibold"
           >
             Close
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Code2, Copy, Check, Download, Layers, Sliders, FileJson } from "lucide-react";
+import { X, Code2, Copy, Check, Download, Sliders, FileJson } from "lucide-react";
 import { SCORECARD_CATEGORIES } from "@/lib/scorecard-config";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface SchemaEditorModalProps {
   isOpen: boolean;
@@ -69,56 +71,66 @@ export function SchemaEditorModal({ isOpen, onClose }: SchemaEditorModalProps) {
             </div>
           </div>
 
-          <button
+          <Button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+            variant="ghost"
+            size="icon-sm"
+            className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
           >
-            <X className="h-5 w-5" />
-          </button>
+            <X className="h-4 w-4" />
+          </Button>
         </div>
 
         {/* View Switcher & Action Strip */}
         <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-xs font-semibold">
           <div className="flex items-center gap-2">
-            <button
+            <Button
               onClick={() => setActiveTab("visual")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
+              variant={activeTab === "visual" ? "secondary" : "ghost"}
+              size="xs"
+              className={`h-7 px-3 text-xs gap-1.5 ${
                 activeTab === "visual"
-                  ? "bg-[var(--color-panel-subtle)] text-[var(--color-brand-accent)] border border-[var(--color-border)] shadow-xs"
-                  : "text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)]"
+                  ? "bg-[var(--color-panel-subtle)] text-[var(--color-brand-accent)] border border-[var(--color-border)] shadow-xs font-bold"
+                  : "text-[var(--color-text-secondary)]"
               }`}
             >
               <Sliders className="h-3.5 w-3.5" />
               <span>Visual Rules Breakdown</span>
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setActiveTab("json")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
+              variant={activeTab === "json" ? "secondary" : "ghost"}
+              size="xs"
+              className={`h-7 px-3 text-xs gap-1.5 ${
                 activeTab === "json"
-                  ? "bg-[var(--color-panel-subtle)] text-[var(--color-brand-accent)] border border-[var(--color-border)] shadow-xs"
-                  : "text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)]"
+                  ? "bg-[var(--color-panel-subtle)] text-[var(--color-brand-accent)] border border-[var(--color-border)] shadow-xs font-bold"
+                  : "text-[var(--color-text-secondary)]"
               }`}
             >
               <FileJson className="h-3.5 w-3.5" />
               <span>Raw JSON Configuration</span>
-            </button>
+            </Button>
           </div>
 
           <div className="flex items-center gap-2">
-            <button
+            <Button
               onClick={handleCopy}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+              variant="outline"
+              size="xs"
+              className="h-7 px-2.5 text-xs gap-1.5"
             >
               {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
               <span>{copied ? "Copied" : "Copy JSON"}</span>
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleDownload}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--color-brand)] text-white hover:bg-slate-800 transition-colors"
+              variant="brand"
+              size="xs"
+              className="h-7 px-2.5 text-xs gap-1.5"
             >
               <Download className="h-3.5 w-3.5" />
               <span>Download Schema</span>
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -145,9 +157,9 @@ export function SchemaEditorModal({ isOpen, onClose }: SchemaEditorModalProps) {
                           {cat.title}
                         </h4>
                       </div>
-                      <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[var(--color-surface)] border border-[var(--color-border)] text-emerald-700 dark:text-emerald-400">
+                      <Badge variant="success" className="font-mono text-xs py-0.5">
                         Green ≥{cat.thresholds.green}%
-                      </span>
+                      </Badge>
                     </div>
 
                     <p className="text-xs text-[var(--color-text-secondary)]">
@@ -183,12 +195,14 @@ export function SchemaEditorModal({ isOpen, onClose }: SchemaEditorModalProps) {
         {/* Modal Footer */}
         <div className="p-4 border-t border-[var(--color-border)] bg-[var(--color-panel-subtle)] flex items-center justify-between text-xs text-[var(--color-text-muted)]">
           <span>Schema Format: JSON Schema Draft 2020-12 • Decoupled from React UI</span>
-          <button
+          <Button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] font-semibold hover:bg-[var(--color-surface-hover)]"
+            variant="outline"
+            size="sm"
+            className="text-xs font-semibold"
           >
             Close Inspector
-          </button>
+          </Button>
         </div>
       </div>
     </div>

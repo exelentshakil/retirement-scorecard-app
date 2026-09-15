@@ -9,19 +9,12 @@ import {
 import {
   Printer,
   Download,
-  Sparkles,
   Shield,
-  ZoomIn,
-  ZoomOut,
-  Maximize2,
-  CheckCircle,
-  AlertTriangle,
-  XCircle,
   FileText,
-  Clock,
-  ExternalLink,
 } from "lucide-react";
 import { AiNarrativeResponse } from "@/lib/ai";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface ScorecardPreviewProps {
   profile: ProspectProfile;
@@ -37,10 +30,7 @@ interface ScorecardPreviewProps {
 export function ScorecardPreview({
   profile,
   scorecard,
-  categories,
   aiNarrative,
-  isAiGenerating,
-  onGenerateAi,
   onPrint,
   onDownloadHtml,
 }: ScorecardPreviewProps) {
@@ -85,59 +75,69 @@ export function ScorecardPreview({
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
             Live 8.5 × 11-inch Portrait Preview
           </span>
-          <span className="text-xs font-mono font-semibold text-[var(--color-text-muted)] bg-[var(--color-surface)] px-2 py-0.5 rounded border border-[var(--color-border)] hidden sm:inline-block">
+          <Badge variant="outline" className="text-xs font-mono font-semibold py-0.5 hidden sm:inline-flex">
             Letter (8.5&quot; × 11&quot;)
-          </span>
+          </Badge>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
           {/* Zoom Selector */}
           <div className="flex items-center bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-0.5 text-xs font-semibold">
-            <button
+            <Button
               onClick={() => setZoomLevel("fit")}
-              className={`px-2 py-1 rounded transition-colors ${
-                zoomLevel === "fit" ? "bg-[var(--color-panel-subtle)] font-bold text-[var(--color-brand-accent)]" : "text-[var(--color-text-muted)]"
+              variant={zoomLevel === "fit" ? "secondary" : "ghost"}
+              size="xs"
+              className={`h-6 px-2 text-xs ${
+                zoomLevel === "fit" ? "font-bold text-[var(--color-brand-accent)]" : "text-[var(--color-text-muted)]"
               }`}
             >
               Fit
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setZoomLevel("75")}
-              className={`px-2 py-1 rounded transition-colors ${
-                zoomLevel === "75" ? "bg-[var(--color-panel-subtle)] font-bold text-[var(--color-brand-accent)]" : "text-[var(--color-text-muted)]"
+              variant={zoomLevel === "75" ? "secondary" : "ghost"}
+              size="xs"
+              className={`h-6 px-2 text-xs ${
+                zoomLevel === "75" ? "font-bold text-[var(--color-brand-accent)]" : "text-[var(--color-text-muted)]"
               }`}
             >
               75%
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setZoomLevel("100")}
-              className={`px-2 py-1 rounded transition-colors ${
-                zoomLevel === "100" ? "bg-[var(--color-panel-subtle)] font-bold text-[var(--color-brand-accent)]" : "text-[var(--color-text-muted)]"
+              variant={zoomLevel === "100" ? "secondary" : "ghost"}
+              size="xs"
+              className={`h-6 px-2 text-xs ${
+                zoomLevel === "100" ? "font-bold text-[var(--color-brand-accent)]" : "text-[var(--color-text-muted)]"
               }`}
             >
               100%
-            </button>
+            </Button>
           </div>
 
           {/* Download Standalone HTML Button */}
-          <button
+          <Button
             onClick={onDownloadHtml}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] transition-colors whitespace-nowrap shrink-0"
+            variant="outline"
+            size="sm"
+            className="text-xs font-semibold gap-1.5"
             title="Download standalone offline HTML/PDF report"
           >
             <Download className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Export HTML</span>
-          </button>
+          </Button>
 
           {/* Direct Print to PDF */}
-          <button
+          <Button
             onClick={onPrint}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-[var(--color-brand)] text-white hover:bg-slate-800 shadow-xs transition-colors whitespace-nowrap shrink-0"
+            variant="brand"
+            size="sm"
+            className="text-xs font-bold gap-1.5"
             title="Generate print-ready single-page PDF with exact letter portrait margins"
           >
             <Printer className="h-3.5 w-3.5" />
             <span>Print PDF</span>
-          </button>
+          </Button>
         </div>
       </div>
 

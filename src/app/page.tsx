@@ -21,6 +21,7 @@ import { calculateScorecard } from "@/lib/scoring-engine";
 import { ProspectProfile } from "@/types/scorecard";
 import { AiNarrativeResponse } from "@/lib/ai";
 import { Zap, ShieldCheck, FileCheck, HelpCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   // 1. Prospect Profile State
@@ -345,29 +346,35 @@ export default function HomePage() {
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
-              <button
+              <Button
                 onClick={() => setIsRoiModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-surface)] text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs transition-all whitespace-nowrap"
+                variant="outline"
+                size="sm"
+                className="text-xs font-semibold gap-1.5"
               >
                 <Zap className="h-3.5 w-3.5 text-amber-500" />
                 <span>Time-Savings ROI</span>
-              </button>
+              </Button>
 
-              <button
+              <Button
                 onClick={() => setIsChaosModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-surface)] text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs transition-all whitespace-nowrap"
+                variant="outline"
+                size="sm"
+                className="text-xs font-semibold gap-1.5"
               >
                 <ShieldCheck className="h-3.5 w-3.5 text-rose-500" />
                 <span>Chaos Outage Test</span>
-              </button>
+              </Button>
 
-              <button
+              <Button
                 onClick={() => setIsBlueprintsModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-surface)] text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs transition-all whitespace-nowrap"
+                variant="outline"
+                size="sm"
+                className="text-xs font-semibold gap-1.5"
               >
                 <FileCheck className="h-3.5 w-3.5 text-blue-500" />
                 <span>Code Ownership &amp; ZIP</span>
-              </button>
+              </Button>
             </div>
           </div>
 

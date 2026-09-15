@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import {
   ProspectProfile,
   ScorecardCategory,
-  Question,
-  QuestionOption,
 } from "@/types/scorecard";
 import {
   User,
@@ -14,12 +12,15 @@ import {
   Receipt,
   ShieldCheck,
   FileCheck2,
-  CheckCircle2,
-  AlertCircle,
   HelpCircle,
   ChevronRight,
   ChevronLeft,
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface AdvisorFormProps {
   profile: ProspectProfile;
@@ -37,7 +38,6 @@ export function AdvisorForm({
   categories,
   answers,
   onChangeAnswer,
-  onReset,
   validationErrors,
 }: AdvisorFormProps) {
   const [activeTab, setActiveTab] = useState<string>("profile");
@@ -108,18 +108,20 @@ export function AdvisorForm({
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
-              <button
+              <Button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-all ${
+                variant={isActive ? "secondary" : "ghost"}
+                size="xs"
+                className={`h-7 px-2.5 text-xs font-semibold gap-1.5 whitespace-nowrap shrink-0 transition-all ${
                   isActive
-                    ? "bg-[var(--color-surface)] text-[var(--color-brand-accent)] shadow-xs border border-[var(--color-border)]"
-                    : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]"
+                    ? "bg-[var(--color-surface)] text-[var(--color-brand-accent)] shadow-xs border border-[var(--color-border)] font-bold"
+                    : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
                 }`}
               >
                 <Icon className="h-3.5 w-3.5" />
                 <span>{tab.label}</span>
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -141,20 +143,17 @@ export function AdvisorForm({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Client Name */}
-              <div>
-                <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+              <div className="space-y-1.5">
+                <Label htmlFor="clientName">
                   Primary Client Name <span className="text-rose-500">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
+                  id="clientName"
                   type="text"
                   value={profile.clientName}
                   onChange={(e) => onChangeProfile("clientName", e.target.value)}
                   placeholder="e.g. Robert & Eleanor Vance"
-                  className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    validationErrors.clientName
-                      ? "border-rose-300 dark:border-rose-800 bg-rose-50/30"
-                      : "border-[var(--color-border)]"
-                  }`}
+                  className={validationErrors.clientName ? "border-rose-300 dark:border-rose-800 bg-rose-50/30" : ""}
                 />
                 {validationErrors.clientName && (
                   <p className="text-xs text-rose-600 mt-1">{validationErrors.clientName}</p>
@@ -162,176 +161,177 @@ export function AdvisorForm({
               </div>
 
               {/* Spouse Name */}
-              <div>
-                <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+              <div className="space-y-1.5">
+                <Label htmlFor="spouseName">
                   Spouse / Co-Client (Optional)
-                </label>
-                <input
+                </Label>
+                <Input
+                  id="spouseName"
                   type="text"
                   value={profile.spouseName}
                   onChange={(e) => onChangeProfile("spouseName", e.target.value)}
                   placeholder="e.g. Eleanor Vance"
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               {/* Current Age */}
-              <div>
-                <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+              <div className="space-y-1.5">
+                <Label htmlFor="currentAge">
                   Current Primary Age <span className="text-rose-500">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
+                  id="currentAge"
                   type="number"
-                  min="20"
-                  max="95"
+                  min={20}
+                  max={95}
                   value={profile.currentAge || ""}
                   onChange={(e) => onChangeProfile("currentAge", parseInt(e.target.value) || 0)}
-                  className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    validationErrors.currentAge
-                      ? "border-rose-300 dark:border-rose-800 bg-rose-50/30"
-                      : "border-[var(--color-border)]"
-                  }`}
+                  className={validationErrors.currentAge ? "border-rose-300 dark:border-rose-800 bg-rose-50/30" : ""}
                 />
               </div>
 
               {/* Target Retirement Age */}
-              <div>
-                <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+              <div className="space-y-1.5">
+                <Label htmlFor="targetRetirementAge">
                   Target Retirement Age <span className="text-rose-500">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
+                  id="targetRetirementAge"
                   type="number"
-                  min="40"
-                  max="95"
+                  min={40}
+                  max={95}
                   value={profile.targetRetirementAge || ""}
                   onChange={(e) => onChangeProfile("targetRetirementAge", parseInt(e.target.value) || 0)}
-                  className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    validationErrors.targetRetirementAge
-                      ? "border-rose-300 dark:border-rose-800 bg-rose-50/30"
-                      : "border-[var(--color-border)]"
-                  }`}
+                  className={validationErrors.targetRetirementAge ? "border-rose-300 dark:border-rose-800 bg-rose-50/30" : ""}
                 />
               </div>
 
               {/* Current Annual Income */}
-              <div>
-                <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+              <div className="space-y-1.5">
+                <Label htmlFor="currentAnnualIncome">
                   Current Household Annual Income ($) <span className="text-rose-500">*</span>
-                </label>
+                </Label>
                 <div className="relative">
                   <span className="absolute left-3 top-2 text-xs text-[var(--color-text-muted)]">$</span>
-                  <input
+                  <Input
+                    id="currentAnnualIncome"
                     type="number"
-                    step="1000"
+                    step={1000}
                     value={profile.currentAnnualIncome || ""}
                     onChange={(e) => onChangeProfile("currentAnnualIncome", parseInt(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-xs sm:text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="pl-7"
                   />
                 </div>
               </div>
 
               {/* Target Monthly Retirement Income */}
-              <div>
-                <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+              <div className="space-y-1.5">
+                <Label htmlFor="targetMonthlyRetirementIncome">
                   Desired Monthly Retirement Income ($) <span className="text-rose-500">*</span>
-                </label>
+                </Label>
                 <div className="relative">
                   <span className="absolute left-3 top-2 text-xs text-[var(--color-text-muted)]">$</span>
-                  <input
+                  <Input
+                    id="targetMonthlyRetirementIncome"
                     type="number"
-                    step="500"
+                    step={500}
                     value={profile.targetMonthlyRetirementIncome || ""}
                     onChange={(e) => onChangeProfile("targetMonthlyRetirementIncome", parseInt(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-xs sm:text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="pl-7"
                   />
                 </div>
               </div>
 
               {/* Current Total Retirement Savings */}
-              <div>
-                <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+              <div className="space-y-1.5">
+                <Label htmlFor="currentRetirementSavings">
                   Total Current Retirement Savings ($) <span className="text-rose-500">*</span>
-                </label>
+                </Label>
                 <div className="relative">
                   <span className="absolute left-3 top-2 text-xs text-[var(--color-text-muted)]">$</span>
-                  <input
+                  <Input
+                    id="currentRetirementSavings"
                     type="number"
-                    step="5000"
+                    step={5000}
                     value={profile.currentRetirementSavings || ""}
                     onChange={(e) => onChangeProfile("currentRetirementSavings", parseInt(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-xs sm:text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="pl-7"
                   />
                 </div>
               </div>
 
               {/* Annual Savings Rate */}
-              <div>
-                <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+              <div className="space-y-1.5">
+                <Label htmlFor="annualSavingsRate">
                   Annual Contribution / Savings Addition ($)
-                </label>
+                </Label>
                 <div className="relative">
                   <span className="absolute left-3 top-2 text-xs text-[var(--color-text-muted)]">$</span>
-                  <input
+                  <Input
+                    id="annualSavingsRate"
                     type="number"
-                    step="1000"
+                    step={1000}
                     value={profile.annualSavingsRate || ""}
                     onChange={(e) => onChangeProfile("annualSavingsRate", parseInt(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-xs sm:text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="pl-7"
                   />
                 </div>
               </div>
 
               {/* Advisor Name */}
-              <div>
-                <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+              <div className="space-y-1.5">
+                <Label htmlFor="advisorName">
                   Lead Advisor Name <span className="text-rose-500">*</span>
-                </label>
-                <input
+                </Label>
+                <Input
+                  id="advisorName"
                   type="text"
                   value={profile.advisorName}
                   onChange={(e) => onChangeProfile("advisorName", e.target.value)}
                   placeholder="e.g. James D. Martin, CFP®"
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               {/* Advisory Firm */}
-              <div>
-                <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+              <div className="space-y-1.5">
+                <Label htmlFor="advisoryFirm">
                   Advisory Firm Name
-                </label>
-                <input
+                </Label>
+                <Input
+                  id="advisoryFirm"
                   type="text"
                   value={profile.advisoryFirm}
                   onChange={(e) => onChangeProfile("advisoryFirm", e.target.value)}
                   placeholder="e.g. Meridian & Blue Ridge Wealth"
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
 
             {/* Advisor Notes */}
-            <div>
-              <label className="block text-xs font-semibold text-[var(--color-text-primary)] mb-1">
+            <div className="space-y-1.5">
+              <Label htmlFor="advisorNotes">
                 Advisor Diagnostic Notes & Client Context
-              </label>
-              <textarea
+              </Label>
+              <Textarea
+                id="advisorNotes"
                 rows={3}
                 value={profile.advisorNotes}
                 onChange={(e) => onChangeProfile("advisorNotes", e.target.value)}
                 placeholder="Include qualitative client objectives, retirement concerns, and legacy goals..."
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             <div className="flex justify-end pt-2">
-              <button
+              <Button
+                type="button"
                 onClick={() => setActiveTab(categories[0].id)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-[var(--color-brand)] text-white hover:bg-slate-800 transition-colors"
+                variant="brand"
+                size="sm"
+                className="gap-1.5"
               >
                 <span>Continue to {categories[0].shortTitle}</span>
                 <ChevronRight className="h-4 w-4" />
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -388,9 +388,9 @@ export function AdvisorForm({
                           )}
                         </div>
                       </div>
-                      <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-muted)] shrink-0">
+                      <Badge variant="outline" className="font-mono text-xs font-semibold py-0.5">
                         Max {q.maxPoints} pts
-                      </span>
+                      </Badge>
                     </div>
 
                     {/* Question Options */}
@@ -404,7 +404,7 @@ export function AdvisorForm({
                               key={opt.id}
                               type="button"
                               onClick={() => onChangeAnswer(q.id, opt.id)}
-                              className={`flex items-center justify-between p-3 rounded-lg border text-xs sm:text-sm font-semibold transition-all ${
+                              className={`flex items-center justify-between p-3 rounded-lg border text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                                 isSelected
                                   ? opt.label.startsWith("Yes")
                                     ? "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300 ring-2 ring-emerald-500/20"
@@ -430,7 +430,7 @@ export function AdvisorForm({
                               key={opt.id}
                               type="button"
                               onClick={() => onChangeAnswer(q.id, opt.id)}
-                              className={`w-full text-left p-3 rounded-lg border transition-all flex items-start justify-between gap-3 ${
+                              className={`w-full text-left p-3 rounded-lg border transition-all flex items-start justify-between gap-3 cursor-pointer ${
                                 isSelected
                                   ? "bg-blue-50/60 dark:bg-blue-950/40 border-blue-300 dark:border-blue-700 text-[var(--color-text-primary)] ring-2 ring-blue-500/20"
                                   : "bg-[var(--color-surface)] border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)]"
@@ -472,7 +472,7 @@ export function AdvisorForm({
 
             {/* Step Navigation Controls */}
             <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
-              <button
+              <Button
                 type="button"
                 onClick={() => {
                   const currentIndex = categories.findIndex((c) => c.id === activeTab);
@@ -482,13 +482,15 @@ export function AdvisorForm({
                     setActiveTab(categories[currentIndex - 1].id);
                   }
                 }}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+                variant="outline"
+                size="sm"
+                className="gap-1.5"
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span>Previous Section</span>
-              </button>
+              </Button>
 
-              <button
+              <Button
                 type="button"
                 onClick={() => {
                   const currentIndex = categories.findIndex((c) => c.id === activeTab);
@@ -496,14 +498,16 @@ export function AdvisorForm({
                     setActiveTab(categories[currentIndex + 1].id);
                   }
                 }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-[var(--color-brand)] text-white hover:bg-slate-800 transition-colors"
+                variant="brand"
+                size="sm"
+                className="gap-1.5"
               >
                 <span>
                   {categories.findIndex((c) => c.id === activeTab) === categories.length - 1
                     ? "Review Completed Scorecard →"
                     : `Next: ${categories[categories.findIndex((c) => c.id === activeTab) + 1]?.shortTitle} →`}
                 </span>
-              </button>
+              </Button>
             </div>
           </div>
         )}

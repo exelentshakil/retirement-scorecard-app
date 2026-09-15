@@ -2,7 +2,10 @@
 
 import React from "react";
 import { OverallScoreResult, ProspectProfile } from "@/types/scorecard";
-import { Activity, CheckCircle, AlertTriangle, XCircle, Shield, TrendingUp } from "lucide-react";
+import { Activity, CheckCircle, AlertTriangle, Shield, TrendingUp } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 
 interface BentoKpisProps {
   scorecard: OverallScoreResult;
@@ -16,15 +19,14 @@ interface BentoKpisProps {
 }
 
 export function BentoKpis({ scorecard, profile, validationStatus }: BentoKpisProps) {
-  // Status badge styling
-  const getStatusColor = (status: "green" | "yellow" | "red") => {
+  const getBadgeVariant = (status: "green" | "yellow" | "red") => {
     switch (status) {
       case "green":
-        return "text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800";
+        return "success" as const;
       case "yellow":
-        return "text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800";
+        return "warning" as const;
       case "red":
-        return "text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 border-rose-200 dark:border-rose-800";
+        return "danger" as const;
     }
   };
 
@@ -40,19 +42,15 @@ export function BentoKpis({ scorecard, profile, validationStatus }: BentoKpisPro
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Bento 1: Overall Readiness Score */}
-          <div className="p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-xs flex flex-col justify-between">
+          <Card className="p-4 shadow-xs flex flex-col justify-between">
             <div className="flex items-center justify-between gap-2 mb-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
                 Overall Readiness
               </span>
-              <span
-                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border whitespace-nowrap shrink-0 ${getStatusColor(
-                  scorecard.overallStatus
-                )}`}
-              >
+              <Badge variant={getBadgeVariant(scorecard.overallStatus)} className="gap-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-current" />
                 {scorecard.overallStatusLabel}
-              </span>
+              </Badge>
             </div>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl sm:text-4xl font-bold font-mono tabular-nums tracking-tight text-[var(--color-text-primary)]">
@@ -63,10 +61,10 @@ export function BentoKpis({ scorecard, profile, validationStatus }: BentoKpisPro
             <p className="text-xs text-[var(--color-text-secondary)] mt-2 line-clamp-1">
               {scorecard.statusCounts.green} Green • {scorecard.statusCounts.yellow} Yellow • {scorecard.statusCounts.red} Red
             </p>
-          </div>
+          </Card>
 
           {/* Bento 2: R/Y/G Indicator Breakdown */}
-          <div className="p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-xs flex flex-col justify-between">
+          <Card className="p-4 shadow-xs flex flex-col justify-between">
             <div className="flex items-center justify-between gap-2 mb-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
                 Status Pillar Distribution
@@ -96,10 +94,10 @@ export function BentoKpis({ scorecard, profile, validationStatus }: BentoKpisPro
             <p className="text-xs text-[var(--color-text-secondary)] mt-1">
               Target: 5/5 Green Pillars for Optimal Transition
             </p>
-          </div>
+          </Card>
 
           {/* Bento 3: Income Replacement Ratio */}
-          <div className="p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-xs flex flex-col justify-between">
+          <Card className="p-4 shadow-xs flex flex-col justify-between">
             <div className="flex items-center justify-between gap-2 mb-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
                 Target Monthly Income
@@ -117,17 +115,12 @@ export function BentoKpis({ scorecard, profile, validationStatus }: BentoKpisPro
                 <span>Safe Portfolio Yield (~4%):</span>
                 <span className="font-mono font-semibold">${estimatedMonthlyDraw.toLocaleString()}/mo</span>
               </div>
-              <div className="w-full h-1.5 bg-[var(--color-panel-subtle)] border border-[var(--color-border)] rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-blue-600 dark:bg-blue-400 rounded-full"
-                  style={{ width: `${replacementRatio}%` }}
-                />
-              </div>
+              <Progress value={replacementRatio} indicatorClassName="bg-blue-600 dark:bg-blue-400" />
             </div>
-          </div>
+          </Card>
 
           {/* Bento 4: Form & Validation Readiness */}
-          <div className="p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-xs flex flex-col justify-between">
+          <Card className="p-4 shadow-xs flex flex-col justify-between">
             <div className="flex items-center justify-between gap-2 mb-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
                 Validation & PDF Readiness
@@ -153,7 +146,7 @@ export function BentoKpis({ scorecard, profile, validationStatus }: BentoKpisPro
                 </span>
               )}
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     </div>

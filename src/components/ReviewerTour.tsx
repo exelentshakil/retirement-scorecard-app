@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle2, ChevronRight, Sparkles, FileText, Sliders, ShieldCheck, Printer } from "lucide-react";
+import { CheckCircle2, ChevronRight, FileText, Sliders, ShieldCheck, Printer } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 
 interface ReviewerTourProps {
   onTestFormValidation: () => void;
@@ -83,11 +86,8 @@ export function ReviewerTour({
             <span className="text-xs font-semibold text-[var(--color-text-muted)]">
               Verification Progress: <span className="text-[var(--color-brand-accent)] font-bold">{completedSteps.length}/4 Steps</span> ({progressPercent}%)
             </span>
-            <div className="w-24 h-2 bg-[var(--color-panel-subtle)] border border-[var(--color-border)] rounded-full overflow-hidden">
-              <div
-                className="h-full bg-emerald-500 transition-all duration-300"
-                style={{ width: `${progressPercent}%` }}
-              />
+            <div className="w-24">
+              <Progress value={progressPercent} indicatorClassName="bg-emerald-500" />
             </div>
           </div>
         </div>
@@ -112,15 +112,15 @@ export function ReviewerTour({
                       <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[var(--color-surface)] border border-[var(--color-border)] text-xs font-bold font-mono text-[var(--color-text-primary)]">
                         0{s.num}
                       </span>
-                      <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
+                      <Badge variant="outline" className="text-[10px] py-0 px-1.5 uppercase tracking-wider font-semibold">
                         {s.tag}
-                      </span>
+                      </Badge>
                     </div>
                     {isDone && (
-                      <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                        <CheckCircle2 className="h-3.5 w-3.5" />
+                      <Badge variant="success" className="text-[10px] py-0 px-1.5 gap-1 font-bold">
+                        <CheckCircle2 className="h-3 w-3" />
                         Verified
-                      </span>
+                      </Badge>
                     )}
                   </div>
                   <h3 className="text-xs sm:text-sm font-bold text-[var(--color-text-primary)] mb-1">
@@ -131,14 +131,16 @@ export function ReviewerTour({
                   </p>
                 </div>
 
-                <button
+                <Button
                   onClick={() => toggleStep(s.num, s.action)}
-                  className="w-full inline-flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-lg text-xs font-semibold bg-[var(--color-surface)] text-[var(--color-brand-accent)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] shadow-xs transition-colors whitespace-nowrap shrink-0"
+                  variant="outline"
+                  size="xs"
+                  className="w-full justify-start h-8 px-2.5 text-xs font-semibold text-[var(--color-brand-accent)] hover:bg-[var(--color-surface-hover)] shadow-2xs"
                 >
                   <Icon className="h-3.5 w-3.5" />
                   <span>{s.actionLabel}</span>
                   <ChevronRight className="h-3 w-3 ml-auto text-[var(--color-text-muted)]" />
-                </button>
+                </Button>
               </div>
             );
           })}

@@ -9,14 +9,12 @@ import {
   RotateCcw,
   Sparkles,
   Code2,
-  Download,
-  Shield,
-  FileSpreadsheet,
-  Zap,
   Users,
 } from "lucide-react";
 import { SAMPLE_PERSONAS } from "@/lib/scorecard-config";
 import { ProspectProfile } from "@/types/scorecard";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface HeaderProps {
   onLoadPersona: (personaId: string) => void;
@@ -36,12 +34,9 @@ export function Header({
   onReset,
   onPrint,
   onOpenSchema,
-  onOpenBlueprints,
-  onOpenRoi,
   onGenerateAi,
   isAiGenerating,
   activePersonaId,
-  profile,
 }: HeaderProps) {
   const { theme, setTheme } = useTheme();
 
@@ -59,10 +54,10 @@ export function Header({
                 <span className="text-sm font-bold tracking-tight text-[var(--color-text-primary)] truncate">
                   Meridian & Blue Ridge Wealth
                 </span>
-                <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 shrink-0">
+                <Badge variant="success" className="hidden sm:inline-flex gap-1 py-0.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   Scorecard v1.0
-                </span>
+                </Badge>
               </div>
               <p className="text-xs text-[var(--color-text-muted)] truncate hidden md:block">
                 Advisory Scorecard Engine • Zero PII Stored
@@ -89,69 +84,77 @@ export function Header({
                       : "bg-rose-500";
 
                   return (
-                    <button
+                    <Button
                       key={p.id}
                       onClick={() => onLoadPersona(p.id)}
                       title={`${p.label} • ${p.badge}\n${p.description}`}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap shrink-0 ${
+                      variant={isSelected ? "secondary" : "ghost"}
+                      size="xs"
+                      className={`h-7 px-2.5 text-xs font-semibold ${
                         isSelected
-                          ? "bg-[var(--color-surface)] text-[var(--color-brand-accent)] shadow-xs border border-[var(--color-border)] font-bold ring-1 ring-black/5 dark:ring-white/10"
-                          : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface)]/60 border border-transparent"
+                          ? "bg-[var(--color-surface)] text-[var(--color-brand-accent)] shadow-xs border border-[var(--color-border)] font-bold"
+                          : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
                       }`}
                     >
                       <span className={`h-1.5 w-1.5 rounded-full ${dotColor} shrink-0`} />
                       <span>{p.firstName || p.shortName}</span>
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
             </div>
 
             {/* AI Narrative Copilot */}
-            <button
+            <Button
               onClick={onGenerateAi}
               disabled={isAiGenerating}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors whitespace-nowrap shrink-0"
+              variant="accent"
+              size="sm"
               title="Generate tailored executive advisory commentary using Dual AI engine"
             >
               <Sparkles className={`h-3.5 w-3.5 ${isAiGenerating ? "animate-spin text-indigo-500" : ""}`} />
               <span className="hidden sm:inline">AI Commentary</span>
-            </button>
+            </Button>
 
             {/* Rules & Schema Configurator */}
-            <button
+            <Button
               onClick={onOpenSchema}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-[var(--color-surface)] text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] transition-colors whitespace-nowrap shrink-0"
+              variant="outline"
+              size="sm"
               title="Inspect or modify decoupled questions, scoring rules, and R/Y/G thresholds"
             >
               <Code2 className="h-3.5 w-3.5 text-[var(--color-text-muted)]" />
               <span className="hidden md:inline xl:hidden">Schema</span>
               <span className="hidden xl:inline">Rules & Schema</span>
-            </button>
+            </Button>
 
             {/* Print / Save PDF Button */}
-            <button
+            <Button
               onClick={onPrint}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg bg-[var(--color-brand)] text-white hover:bg-slate-800 dark:hover:bg-blue-600 shadow-sm transition-all active:scale-95 whitespace-nowrap shrink-0"
+              variant="brand"
+              size="sm"
               title="Print or export guaranteed 8.5x11 inch single-page PDF report"
             >
               <Printer className="h-3.5 w-3.5" />
               <span>Print PDF</span>
-            </button>
+            </Button>
 
             {/* Reset Button */}
-            <button
+            <Button
               onClick={onReset}
-              className="p-1.5 text-[var(--color-text-muted)] hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition-colors shrink-0"
+              variant="ghost"
+              size="icon-sm"
+              className="hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
               title="Clear all fields and start a fresh prospect"
             >
               <RotateCcw className="h-4 w-4" />
-            </button>
+            </Button>
 
             {/* Theme Toggle */}
-            <button
+            <Button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-1.5 text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)] rounded-lg transition-colors shrink-0"
+              variant="ghost"
+              size="icon-sm"
               title="Toggle color theme (Light/Dark)"
               aria-label="Toggle theme"
             >
@@ -160,7 +163,7 @@ export function Header({
               ) : (
                 <Moon className="h-4 w-4 text-slate-600" />
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
