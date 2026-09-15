@@ -96,7 +96,7 @@ export function BlueprintExporter({ isOpen, onClose }: BlueprintExporterProps) {
     </tbody>
   </table>
   <div class="disclaimer">
-    IMPORTANT DISCLOSURE: For educational and illustrative purposes only. Not formal legal or tax advice. Securities and advisory services offered through Blue Ridge & Meridian Wealth Partners.
+    IMPORTANT DISCLOSURE: For educational and illustrative purposes only. Not formal legal or tax advice. Securities and advisory services offered through Meridian & Blue Ridge Wealth.
   </div>
 </body>
 </html>`;

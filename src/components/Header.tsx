@@ -64,7 +64,7 @@ export function Header({
                 </span>
               </div>
               <p className="text-xs text-[var(--color-text-muted)] truncate hidden md:block">
-                Internal Advisory Intake & Single-Page PDF Engine • No External PII Stored
+                Advisory Scorecard Engine • Zero PII Stored
               </p>
             </div>
           </div>
@@ -72,9 +72,9 @@ export function Header({
           {/* Center/Right: Action Controls */}
           <div className="flex items-center gap-2 shrink-0">
             {/* Persona Quick Loader */}
-            <div className="hidden lg:flex items-center gap-1 bg-[var(--color-panel-subtle)] p-1 rounded-lg border border-[var(--color-border)] shrink-0">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] px-2">
-                Quick Persona:
+            <div className="hidden lg:flex items-center gap-1 bg-[var(--color-panel-subtle)] p-0.5 rounded-lg border border-[var(--color-border)] shrink-0">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] px-1.5">
+                Persona:
               </span>
               {SAMPLE_PERSONAS.map((p) => {
                 const isSelected = activePersonaId === p.id;
@@ -83,7 +83,7 @@ export function Header({
                     key={p.id}
                     onClick={() => onLoadPersona(p.id)}
                     title={p.description}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-all whitespace-nowrap shrink-0 ${
+                    className={`px-2 py-0.5 text-xs font-semibold rounded-md transition-all whitespace-nowrap shrink-0 ${
                       isSelected
                         ? "bg-[var(--color-surface)] text-[var(--color-brand-accent)] shadow-xs border border-[var(--color-border)]"
                         : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface)]/60"
@@ -113,7 +113,8 @@ export function Header({
               title="Inspect or modify decoupled questions, scoring rules, and R/Y/G thresholds"
             >
               <Code2 className="h-3.5 w-3.5 text-[var(--color-text-muted)]" />
-              <span className="hidden md:inline">Rules & Schema</span>
+              <span className="hidden md:inline xl:hidden">Schema</span>
+              <span className="hidden xl:inline">Rules & Schema</span>
             </button>
 
             {/* Print / Save PDF Button */}

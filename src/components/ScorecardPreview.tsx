@@ -155,25 +155,25 @@ export function ScorecardPreview({
         >
           {/* 1. Header & Institutional Branding */}
           <div className="border-b-2 border-slate-900 pb-4 mb-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#0f2942] text-white font-serif font-bold text-xl shadow-xs">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg bg-[#0f2942] text-white font-serif font-bold text-lg sm:text-xl shadow-xs">
                   M
                 </div>
-                <div>
-                  <h1 className="text-base sm:text-lg font-extrabold tracking-tight text-[#0f2942] uppercase font-sans">
-                    {profile.advisoryFirm || "Blue Ridge & Meridian Wealth Partners"}
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-sm sm:text-base md:text-lg font-extrabold tracking-tight text-[#0f2942] uppercase font-sans whitespace-nowrap truncate leading-tight">
+                    {profile.advisoryFirm || "Meridian & Blue Ridge Wealth"}
                   </h1>
-                  <p className="text-[10px] sm:text-xs font-semibold tracking-wider text-slate-500 uppercase">
-                    Private Wealth Management • Comprehensive Retirement Diagnostic
+                  <p className="text-[10px] sm:text-xs font-semibold tracking-wider text-slate-500 uppercase whitespace-nowrap truncate">
+                    Private Wealth Management • Retirement Diagnostic
                   </p>
                 </div>
               </div>
-              <div className="text-right shrink-0">
-                <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-300">
+              <div className="text-right shrink-0 pt-0.5">
+                <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-300 whitespace-nowrap">
                   Confidential Scorecard
                 </span>
-                <p className="text-[10px] text-slate-500 mt-1 font-mono">
+                <p className="text-[10px] text-slate-500 mt-1 font-mono whitespace-nowrap">
                   Date: {profile.assessmentDate || new Date().toISOString().split("T")[0]}
                 </p>
               </div>
@@ -404,7 +404,7 @@ export function ScorecardPreview({
               </div>
             </div>
             <p className="leading-tight text-slate-400">
-              IMPORTANT COMPLIANCE DISCLOSURE: This Retirement Readiness Scorecard is provided for informational and educational purposes only and does not constitute formal legal, tax, or investment advice. Projections are based on client-provided inputs, actuarial estimates, and standardized assumptions. Past performance does not guarantee future results. Securities and advisory services offered through Blue Ridge &amp; Meridian Wealth Partners LLC, an SEC-registered investment adviser.
+              IMPORTANT COMPLIANCE DISCLOSURE: This Retirement Readiness Scorecard is provided for informational and educational purposes only and does not constitute formal legal, tax, or investment advice. Projections are based on client-provided inputs, actuarial estimates, and standardized assumptions. Past performance does not guarantee future results. Securities and advisory services offered through Meridian &amp; Blue Ridge Wealth LLC, an SEC-registered investment adviser.
             </p>
           </div>
         </div>

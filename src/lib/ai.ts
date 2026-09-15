@@ -39,7 +39,7 @@ export async function generateAdvisorNarrative(
   const overallScore = scorecard?.overallScore ?? 70;
   const overallStatusLabel = scorecard?.overallStatusLabel || "Moderate Readiness";
 
-  const prompt = `You are a Senior CFP® (Certified Financial Planner) at ${profile?.advisoryFirm || "Blue Ridge & Meridian Wealth Partners"}.
+  const prompt = `You are a Senior CFP® (Certified Financial Planner) at ${profile?.advisoryFirm || "Meridian & Blue Ridge Wealth"}.
 Write a polished, 2-paragraph executive assessment narrative for client: ${clientName} (Age ${currentAge}, target retirement age ${targetAge}).
 Current Assets: $${currentSavings.toLocaleString()} | Target Retirement Income: $${targetMonthly.toLocaleString()}/mo.
 Overall Retirement Readiness Score: ${overallScore}/100 (${overallStatusLabel}).

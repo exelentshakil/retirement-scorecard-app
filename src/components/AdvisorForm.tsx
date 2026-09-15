@@ -42,11 +42,30 @@ export function AdvisorForm({
 }: AdvisorFormProps) {
   const [activeTab, setActiveTab] = useState<string>("profile");
 
+  const getTabLabel = (id: string, fallback: string) => {
+    switch (id) {
+      case "profile":
+        return "Profile";
+      case "cash_flow":
+        return "Income";
+      case "investments":
+        return "Invest";
+      case "tax_planning":
+        return "Taxes";
+      case "healthcare":
+        return "Health";
+      case "estate_legacy":
+        return "Estate";
+      default:
+        return fallback;
+    }
+  };
+
   const tabs = [
-    { id: "profile", label: "Prospect Profile", icon: User },
+    { id: "profile", label: "Profile", icon: User },
     ...categories.map((c) => ({
       id: c.id,
-      label: c.shortTitle,
+      label: getTabLabel(c.id, c.shortTitle),
       icon: getCategoryIcon(c.id),
     })),
   ];
@@ -92,7 +111,7 @@ export function AdvisorForm({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-all ${
+                className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-all ${
                   isActive
                     ? "bg-[var(--color-surface)] text-[var(--color-brand-accent)] shadow-xs border border-[var(--color-border)]"
                     : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]"
@@ -285,7 +304,7 @@ export function AdvisorForm({
                   type="text"
                   value={profile.advisoryFirm}
                   onChange={(e) => onChangeProfile("advisoryFirm", e.target.value)}
-                  placeholder="e.g. Blue Ridge & Meridian Wealth Partners"
+                  placeholder="e.g. Meridian & Blue Ridge Wealth"
                   className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>

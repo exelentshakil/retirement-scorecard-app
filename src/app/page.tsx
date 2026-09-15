@@ -119,7 +119,7 @@ export default function HomePage() {
       currentRetirementSavings: 500000,
       annualSavingsRate: 15000,
       advisorName: "James D. Martin, CFP®",
-      advisoryFirm: "Blue Ridge & Meridian Wealth Partners",
+      advisoryFirm: "Meridian & Blue Ridge Wealth",
       assessmentDate: new Date().toISOString().split("T")[0],
       advisorNotes: "",
       firmPhone: "(540) 555-0194",
@@ -248,25 +248,25 @@ export default function HomePage() {
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={() => setIsRoiModalOpen(true)}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100 transition-colors whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-surface)] text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs transition-all whitespace-nowrap"
               >
-                <Zap className="h-3.5 w-3.5 text-emerald-600" />
+                <Zap className="h-3.5 w-3.5 text-amber-500" />
                 <span>Time-Savings ROI</span>
               </button>
 
               <button
                 onClick={() => setIsChaosModalOpen(true)}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60 hover:bg-rose-100 transition-colors whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-surface)] text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs transition-all whitespace-nowrap"
               >
-                <ShieldCheck className="h-3.5 w-3.5 text-rose-600" />
+                <ShieldCheck className="h-3.5 w-3.5 text-rose-500" />
                 <span>Chaos Outage Test</span>
               </button>
 
               <button
                 onClick={() => setIsBlueprintsModalOpen(true)}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60 hover:bg-blue-100 transition-colors whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-surface)] text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)] hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs transition-all whitespace-nowrap"
               >
-                <FileCheck className="h-3.5 w-3.5 text-blue-600" />
+                <FileCheck className="h-3.5 w-3.5 text-blue-500" />
                 <span>Code Ownership &amp; ZIP</span>
               </button>
             </div>
