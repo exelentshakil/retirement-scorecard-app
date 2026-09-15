@@ -77,7 +77,7 @@ export function ScorecardPreview({
   const estimatedSafeMonthlyDraw = Math.round(((profile.currentRetirementSavings || 0) * 0.04) / 12);
 
   return (
-    <div className="flex flex-col h-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-xs overflow-hidden">
+    <div className="flex flex-col h-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-xs overflow-hidden scorecard-preview-container">
       {/* Scorecard Control Toolbar */}
       <div className="border-b border-[var(--color-border)] bg-[var(--color-panel-subtle)] p-3 flex flex-wrap items-center justify-between gap-3 no-print">
         <div className="flex items-center gap-2">
@@ -142,16 +142,17 @@ export function ScorecardPreview({
       </div>
 
       {/* Preview Viewport Container */}
-      <div className="flex-1 overflow-y-auto overflow-x-auto p-4 sm:p-6 bg-slate-100 dark:bg-slate-950/60 flex justify-center">
+      <div className="flex-1 overflow-y-auto overflow-x-auto p-4 sm:p-6 bg-slate-200/70 dark:bg-slate-900/50 flex justify-center items-start preview-viewport-container">
         {/* Printable 8.5 x 11-inch Portrait Sheet */}
         <div
           id="scorecard-printable"
           style={{
             width: zoomLevel === "100" ? "8.5in" : zoomLevel === "75" ? "6.37in" : "100%",
             maxWidth: "8.5in",
-            minHeight: zoomLevel === "fit" ? "auto" : "11in",
+            minHeight: "fit-content",
+            height: "fit-content",
           }}
-          className="bg-white text-slate-900 rounded-lg shadow-xl border border-slate-200 p-6 sm:p-8 flex flex-col justify-between transition-all duration-200 font-sans"
+          className="bg-white text-slate-900 rounded-lg shadow-xl border border-slate-200 p-6 sm:p-8 flex flex-col justify-between transition-all duration-200 font-sans shrink-0"
         >
           {/* 1. Header & Institutional Branding */}
           <div className="border-b-2 border-slate-900 pb-4 mb-4">

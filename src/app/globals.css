@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   :root {
@@ -102,7 +103,7 @@ code, kbd, pre, .font-mono {
 @media print {
   @page {
     size: letter portrait;
-    margin: 8mm 10mm 8mm 10mm;
+    margin: 6mm 8mm 6mm 8mm;
   }
   
   *, *:before, *:after {
@@ -111,26 +112,60 @@ code, kbd, pre, .font-mono {
     color-adjust: exact !important;
   }
 
-  body {
+  html, body {
     background: #ffffff !important;
     color: #0f172a !important;
     padding: 0 !important;
     margin: 0 !important;
-    font-size: 10pt !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
   }
 
   .no-print, nav, header, footer, .reviewer-tour, .bento-kpi, .form-column, .modal-backdrop {
     display: none !important;
   }
 
-  .print-only-container {
-    display: block !important;
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100% !important;
-    margin: 0 !important;
+  main {
     padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    display: block !important;
+  }
+
+  main > div {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .grid {
+    display: block !important;
+  }
+
+  .lg\:col-span-7 {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .scorecard-preview-container {
+    height: auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+  }
+
+  .preview-viewport-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    display: block !important;
+    height: auto !important;
   }
 
   #scorecard-printable {
@@ -138,9 +173,56 @@ code, kbd, pre, .font-mono {
     border: none !important;
     max-width: 100% !important;
     width: 100% !important;
+    height: 100% !important;
+    max-height: 265mm !important;
     margin: 0 auto !important;
-    padding: 0 !important;
+    padding: 8px 16px !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    background: #ffffff !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    font-size: 8pt !important;
+    zoom: 0.92;
+  }
+
+  /* Compact print spacing to guarantee single page */
+  #scorecard-printable .mb-4 {
+    margin-bottom: 6px !important;
+  }
+  #scorecard-printable .pb-4 {
+    padding-bottom: 6px !important;
+  }
+  #scorecard-printable .p-3\.5 {
+    padding: 5px 8px !important;
+  }
+  #scorecard-printable .p-3 {
+    padding: 4px 6px !important;
+  }
+  #scorecard-printable .p-2\.5 {
+    padding: 3px 6px !important;
+  }
+  #scorecard-printable table th,
+  #scorecard-printable table td {
+    padding: 2.5px 5px !important;
+  }
+  #scorecard-printable .text-xs {
+    font-size: 7.5pt !important;
+    line-height: 1.15 !important;
+  }
+  #scorecard-printable .text-\[11px\] {
+    font-size: 7pt !important;
+    line-height: 1.15 !important;
+  }
+  #scorecard-printable .text-\[10px\] {
+    font-size: 6.5pt !important;
+    line-height: 1.1 !important;
+  }
+  #scorecard-printable .text-\[9px\] {
+    font-size: 6pt !important;
+    line-height: 1.05 !important;
   }
 }

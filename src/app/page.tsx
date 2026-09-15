@@ -232,10 +232,10 @@ export default function HomePage() {
       />
 
       {/* 4. Main Dual Split-Pane Workspace */}
-      <main className="flex-1 w-full py-6 no-print">
+      <main className="flex-1 w-full py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Quick Action Bar for Overdelivery Weapons */}
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4 p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-2xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4 p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-2xs no-print">
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
                 Operational Utilities:
